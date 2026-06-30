@@ -4,6 +4,7 @@ import { HERO_TITLES } from '@/data/personal';
 import MagneticButton from '@/components/ui/MagneticButton';
 import { FiArrowDown, FiExternalLink, FiDownload } from 'react-icons/fi';
 import { useIsMobile } from '@/hooks/useMediaQuery';
+import HoverMaskEffect from '@/components/HoverMaskEffect';
 
 const Scene = lazy(() => import('@/components/three/Scene'));
 const GlassSphere = lazy(() => import('@/components/three/GlassSphere'));
@@ -25,7 +26,7 @@ export default function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden py-32"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden py-32 bg-bg-primary"
     >
       {/* Three.js Background — Centered & Soft */}
       {!isMobile && (
@@ -54,30 +55,55 @@ export default function Hero() {
         </motion.div>
 
         {/* Name — Dominant Hierarchy */}
-        <div className="space-y-12">
-          <motion.h1
-            className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-bold tracking-tight leading-[0.85] editorial-text"
-            style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
-          >
-            Daksh Mulundkar
-          </motion.h1>
-          
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-            className="text-xl md:text-2xl text-text-secondary font-light max-w-2xl mx-auto leading-relaxed"
-          >
-            Engineering robust, high-performance digital systems for the AI-first world. Specializing in architecture that scales.
-          </motion.p>
-        </div>
+        <HoverMaskEffect 
+          circleRadius={200} 
+          accentColor="#38bdf8" 
+          textColor="#000000"
+          className="w-full px-8"
+          revealChildren={
+            <div className="py-10 flex flex-col items-center space-y-12 w-full">
+              <h1
+                className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-bold tracking-tight leading-[0.85] whitespace-nowrap"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                Daksh Mulundkar
+              </h1>
+              
+              <div className="w-fit mx-auto text-left">
+                <p className="text-xl md:text-2xl font-bold uppercase tracking-[0.2em] font-mono leading-relaxed">
+                  I Question Fragile architecture
+                </p>
+              </div>
+            </div>
+          }
+        >
+          <div className="py-10 flex flex-col items-center space-y-12 w-full">
+            <motion.h1
+              className="text-6xl sm:text-7xl md:text-8xl lg:text-[140px] font-bold tracking-tight leading-[0.85] editorial-text whitespace-nowrap"
+              style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.5, delay: 0.2, ease: [0.19, 1, 0.22, 1] }}
+            >
+              Daksh Mulundkar
+            </motion.h1>
+            
+            <div className="w-fit mx-auto text-left">
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
+                className="text-xl md:text-2xl text-text-secondary font-mono tracking-[0.2em] uppercase leading-relaxed"
+              >
+                I BUILD RELIABLE SYSTEM
+              </motion.p>
+            </div>
+          </div>
+        </HoverMaskEffect>
 
         {/* CTA Buttons — Generously Spaced */}
         <motion.div
-          className="mt-20 flex flex-wrap items-center justify-center gap-8"
+          className="mt-20 flex flex-wrap items-center justify-center gap-16"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 1, ease: [0.19, 1, 0.22, 1] }}
@@ -86,36 +112,16 @@ export default function Hero() {
             className="bg-white text-bg-primary border-none px-12 py-6 hover:bg-sky-50 text-[10px] uppercase tracking-[0.2em] font-bold rounded-full transition-all"
             onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Explore Work
+            Projects
           </MagneticButton>
 
           <MagneticButton
             href="/resume.pdf"
-            download
+            download="Daksh-Mulundkar-Resume.pdf"
             className="bg-transparent text-text-primary border-white/10 hover:border-white/30 px-12 py-6 text-[10px] uppercase tracking-[0.2em] font-bold rounded-full transition-all"
           >
-            Curriculum Vitae
+            Resume
           </MagneticButton>
-        </motion.div>
-
-        {/* Bottom Metadata — Subtle & Spaced */}
-        <motion.div 
-          className="mt-32 flex flex-wrap items-center justify-center gap-16 opacity-30 pt-16 border-t border-white/5 w-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 2 }}
-        >
-          {[
-            { label: 'Year', val: '2026' },
-            { label: 'Specialty', val: 'Full-Stack' },
-            { label: 'Role', val: 'Architect' },
-            { label: 'Based', val: 'Mumbai' },
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col gap-2 items-center">
-              <span className="text-[9px] uppercase tracking-widest font-mono">{stat.label}</span>
-              <span className="text-xs font-semibold">{stat.val}</span>
-            </div>
-          ))}
         </motion.div>
       </div>
 

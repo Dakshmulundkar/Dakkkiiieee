@@ -4,6 +4,7 @@ import { PROJECTS } from '@/data/projects';
 import ProjectCard from './ProjectCard';
 import { cn } from '@/lib/utils';
 import { usePageTransition } from '@/context/TransitionContext';
+import SectionHeading from '@/components/ui/SectionHeading';
 
 export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,13 +13,13 @@ export default function Projects() {
     target: containerRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${(PROJECTS.length - 1) * 100}%`]);
+  const x = useTransform(scrollYProgress, [0, 1], ['0%', `-${(PROJECTS.length) * 100}%`]);
 
   return (
     <section 
       ref={containerRef} 
       id="projects" 
-      className="relative h-[400vh] bg-bg-primary"
+      className="relative h-[500vh] bg-bg-primary"
     >
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden">
         {/* Background Visual Branding — Submerged Geometry */}
@@ -26,11 +27,17 @@ export default function Projects() {
            <span className="text-[25vw] font-bold select-none tracking-tighter uppercase whitespace-nowrap">Core Architect</span>
         </div>
 
+
         <div className="relative z-10 w-full">
            <motion.div 
              style={{ x }} 
              className="flex"
            >
+             {/* Dynamic Heading Slide */}
+             <div className="w-screen flex-shrink-0 flex items-center justify-center -translate-y-32">
+                <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="center" />
+             </div>
+
              {PROJECTS.map((project, i) => (
                <ProjectCard key={project.id} project={project} index={i} />
              ))}
@@ -49,13 +56,7 @@ export default function Projects() {
            </div>
            
            <div className="flex flex-col items-end gap-2 translate-y-1">
-              <button 
-                onClick={() => playTransition('/projects')}
-                className="group flex items-center gap-4 px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white hover:text-black transition-all duration-500 mb-4"
-              >
-                 <span className="text-[10px] font-mono uppercase tracking-[0.3em]">View Full Repository</span>
-              </button>
-              <span className="text-[3rem] font-bold editorial-text opacity-5">Index_{PROJECTS.length}</span>
+              <span className="text-[7rem] font-bold editorial-text opacity-10 leading-none">Index_{PROJECTS.length}</span>
               <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-white/10">System_Output_01</span>
            </div>
         </div>

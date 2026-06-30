@@ -8,7 +8,7 @@ interface MagneticButtonProps {
   strength?: number;
   onClick?: () => void;
   href?: string;
-  download?: boolean;
+  download?: boolean | string;
   target?: string;
   style?: React.CSSProperties;
 }
@@ -48,7 +48,7 @@ export default function MagneticButton({
   };
 
   const Component = href ? 'a' : 'button';
-  const linkProps = href ? { href, download, target, rel: target === '_blank' ? 'noopener noreferrer' : undefined } : {};
+  const linkProps = href ? { href, download, target, rel: target === '_blank' ? 'noopener noreferrer' : undefined } : { type: 'button' as const };
 
   return (
     <motion.div

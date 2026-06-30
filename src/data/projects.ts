@@ -29,7 +29,7 @@ export const PROJECTS: Project[] = [
     description: 'Intelligent verification system supporting Aadhaar/PAN OCR, face recognition, liveness detection, and AES-256 secure document handling.',
     image: '/projects/ai-kyc.png',
     tech: ['Python', 'Flask', 'React', 'OpenCV', 'Face Recognition', 'AES-256'],
-    github: 'https://github.com/Dakshmulundkar/AI-KYC',
+    github: 'https://github.com/Dakshmulundkar/KYC-verification-ap.git',
     featured: true,
     caseStudy: {
       problem: "Manual KYC verification is slow, prone to human error, and vulnerable to identity fraud through static photo spoofs.",
@@ -63,33 +63,13 @@ export const PROJECTS: Project[] = [
     }
   },
   {
-    id: 'productivity',
-    title: 'Productivity Ecosystem',
-    category: 'Mobile Application',
-    description: 'Modern task management and habit tracker featuring productivity analytics and upcoming AI augmentation. Built with Expo and TypeScript.',
-    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=2672&auto=format&fit=crop',
-    tech: ['React Native', 'Expo', 'TypeScript', 'Victory Native', 'Async Storage'],
-    github: 'https://github.com/Dakshmulundkar/Productivity-App',
-    featured: true,
-    caseStudy: {
-      problem: "Productivity apps often overwhelm users with complexity, leading to abandonment rather than habit formation.",
-      solution: "Designed a minimalist mobile experience focused on atomic habits and visual progress tracking using data visualization.",
-      architecture: "Client-side first architecture using React Native with local persistent storage, optimized for offline-first usage with background synchronization.",
-      challenges: [
-        "Developing a fluid UI that remains performant across both high-end and mid-range Android/iOS devices.",
-        "Designing intuitive data visualizations for small mobile screens."
-      ],
-      outcome: "Created a highly responsive cross-platform application that encourages consistent user engagement through clean UX and visual feedback."
-    }
-  },
-  {
     id: 'disaster-mgmt',
     title: 'Disaster Management',
     category: 'Artificial Intelligence',
     description: 'AI prediction and emergency management platform using Computer Vision (PyTorch) to classify disasters and support multilingual reporting.',
     image: '/projects/disaster.png',
     tech: ['PyTorch', 'Computer Vision', 'React', 'Tailwind CSS', 'Leaflet'],
-    github: 'https://github.com/Dakshmulundkar/Disaster-AI',
+    github: 'https://github.com/Dakshmulundkar/DisasterSense.git',
     featured: true,
     caseStudy: {
       problem: "Delayed disaster response is often caused by fragmented reporting and slow manual classification of emergency footage.",

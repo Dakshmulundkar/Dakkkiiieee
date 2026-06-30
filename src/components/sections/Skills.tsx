@@ -1,73 +1,96 @@
+import { useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES, SKILLS } from '@/data/skills';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { cn } from '@/lib/utils';
 
+const Scene = lazy(() => import('@/components/three/Scene'));
+const TechOrbit = lazy(() => import('@/components/three/TechOrbit'));
+
 export default function Skills() {
   return (
-    <section id="skills" className="section-padding relative overflow-hidden bg-bg-primary">
-      <div className="max-w-container mx-auto">
-        <SectionHeading title="Technical Core" subtitle="Stack Architecture" align="left" />
+    <section id="skills" className="py-32 relative overflow-hidden bg-bg-primary">
+      {/* Decorative Background Element */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+      
+      <div className="max-w-container mx-auto relative z-10 px-8">
+        <div className="flex flex-col lg:flex-row gap-20 items-start">
+          
+          {/* Left Side: Editorial Intro & 3D Element */}
+          <div className="lg:w-1/3 sticky top-32">
+            <SectionHeading title="Technical Core" subtitle="Stack Architecture" align="left" />
+            <p className="text-text-secondary mt-8 text-lg font-light leading-relaxed max-w-sm">
+              My technical foundation is built on the principles of scalability, performance, and type-safety. I architect systems that bridge the gap between high-level logic and low-level efficiency.
+            </p>
+            
+            <div className="mt-12 w-full aspect-square relative rounded-3xl overflow-hidden bg-white/[0.02] border border-white/5">
+                <Suspense fallback={<div className="w-full h-full flex items-center justify-center font-mono text-[10px] opacity-20">Loading_Visualizer...</div>}>
+                    <Scene camera={{ position: [0, 0, 5], fov: 40 }}>
+                        <TechOrbit />
+                    </Scene>
+                </Suspense>
+            </div>
+          </div>
 
-        <div className="mt-24 grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/5 border border-white/5 rounded-[40px] overflow-hidden">
-          {SKILL_CATEGORIES.map((category, i) => (
-            <motion.div
-              key={category.name}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 1, delay: i * 0.1 }}
-              className={cn(
-                "group p-12 lg:p-16 bg-bg-primary hover:bg-white/[0.01] transition-all duration-700",
-                "flex flex-col gap-12"
-              )}
-            >
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                   <span className="text-xs font-mono text-sky-400 font-bold uppercase tracking-[0.3em]">Module_0{i + 1}</span>
-                   <div className="h-px flex-1 bg-white/5" />
+          {/* Right Side: High-End Modular Grid */}
+          <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            {SKILL_CATEGORIES.map((category, i) => (
+              <motion.div
+                key={category.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: i * 0.1 }}
+                className="group p-8 rounded-[32px] bg-white/[0.01] border border-white/5 hover:border-sky-500/20 hover:bg-white/[0.02] transition-all duration-500"
+              >
+                <div className="flex items-center justify-between mb-8">
+                   <div className="p-3 rounded-2xl bg-white/[0.03] border border-white/5 group-hover:bg-sky-500/10 group-hover:border-sky-500/20 transition-all">
+                      <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-widest">M_{i + 1}</span>
+                   </div>
+                   <div className="h-px flex-1 mx-4 bg-white/5 group-hover:bg-sky-500/20 transition-all" />
                 </div>
-                <h3 className="text-3xl font-bold editorial-text" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+
+                <h3 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                    {category.name}
                 </h3>
-                <p className="text-sm text-text-muted leading-relaxed max-w-md">
+                
+                <p className="text-xs text-text-muted mb-8 leading-relaxed font-mono uppercase tracking-tight opacity-60">
                    {category.description}
                 </p>
-              </div>
 
-              <div className="flex flex-wrap gap-4">
-                {SKILLS.filter(s => s.category === category.name).map((skill) => (
-                  <motion.div
-                    key={skill.name}
-                    className="relative group/skill"
-                    whileHover={{ y: -2 }}
-                  >
-                    <span className="relative z-10 block px-6 py-2.5 rounded-full border border-white/10 bg-white/[0.02] text-[10px] font-mono text-text-secondary uppercase tracking-widest group-hover/skill:text-sky-400 group-hover/skill:border-sky-500/50 transition-all duration-500">
+                <div className="flex flex-wrap gap-2">
+                  {SKILLS.filter(s => s.category === category.name).map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="px-4 py-2 rounded-xl border border-white/5 bg-white/[0.02] text-[10px] font-mono text-text-secondary uppercase tracking-widest group-hover:text-white group-hover:border-white/10 transition-all font-medium"
+                    >
                       {skill.name}
                     </span>
-                    <div className="absolute inset-0 bg-sky-500/10 blur-xl opacity-0 group-hover/skill:opacity-100 transition-opacity" />
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        {/* Global Competency Indicator */}
-        <div className="mt-20 flex flex-wrap items-center justify-between gap-12 border-t border-white/5 pt-12">
-           <div className="flex flex-col gap-2">
-              <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-white/20">Learning_Protocol</span>
-              <span className="text-sm font-medium text-text-muted">Currently deep diving into Rust Systems & Distributed Computing.</span>
+        {/* Global Competency Metric Strip */}
+        <div className="mt-32 p-10 rounded-[40px] bg-white/[0.01] border border-white/5 flex flex-wrap items-center justify-between gap-10">
+           <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                 <span className="text-[10px] font-mono text-white/40 uppercase tracking-[0.4em]">Internal_Logic_Uptime</span>
+              </div>
+              <p className="text-sm font-medium text-text-muted">Mastering Distributed Systems and Low-Level Performance Tuning.</p>
            </div>
            
-           <div className="flex items-center gap-8">
-              <div className="flex flex-col items-end">
-                 <span className="text-2xl font-bold text-white leading-none">99.8%</span>
-                 <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-sky-400/60 mt-2">Architecture_Uptime</span>
+           <div className="flex items-center gap-12">
+              <div className="text-right">
+                 <p className="text-4xl font-bold text-white editorial-text">99.8%</p>
+                 <p className="text-[10px] font-mono text-sky-400/60 uppercase tracking-[0.3em] font-bold mt-2">Architecture</p>
               </div>
-              <div className="w-px h-10 bg-white/10" />
-              <div className="flex flex-col items-end">
-                 <span className="text-2xl font-bold text-white leading-none">12+</span>
-                 <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-sky-400/60 mt-2">Core_Technologies</span>
+              <div className="w-px h-12 bg-white/10" />
+              <div className="text-right">
+                 <p className="text-4xl font-bold text-white editorial-text">12+</p>
+                 <p className="text-[10px] font-mono text-sky-400/60 uppercase tracking-[0.3em] font-bold mt-2">Core Tech</p>
               </div>
            </div>
         </div>
