@@ -1,0 +1,193 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════
+   ULTRA-PREMIUM DESIGN SYSTEM (8px SYSTEM)
+   ═══════════════════════════════════════════════════ */
+
+@theme {
+  /* Colors - Sophisticated Monochromatic + Arctic Accents */
+  --color-bg-primary: #050505;
+  --color-bg-secondary: #0a0a0a;
+  --color-bg-card: rgba(15, 15, 15, 0.4);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-text-dim: #334155;
+
+  --color-accent-sky: #38bdf8;
+  --color-accent-emerald: #10b981;
+
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(255, 255, 255, 0.1);
+  --color-border-active: rgba(255, 255, 255, 0.2);
+
+  /* Spacing Tokens (8px system) */
+  --spacing-section: 160px;
+  --spacing-container: 1400px;
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+
+  /* Typography */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Easing Functions - Smoother for Luxury feel */
+  --ease-ultra: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out-ultra: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Shadows */
+  --shadow-premium: 0 4px 60px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-hover: 0 30px 100px rgba(0, 0, 0, 1), 0 0 1px rgba(255, 255, 255, 0.1);
+
+  /* Radius */
+  --radius-button: 16px;
+  --radius-card: 24px;
+  --radius-inner: 16px;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL RESETS & REFINEMENTS
+   ═══════════════════════════════════════════════════ */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.7;
+  /* Increased line-height for readability */
+}
+
+/* ═══════════════════════════════════════════════════
+   PREMIUM UTILITIES
+   ═══════════════════════════════════════════════════ */
+
+.section-padding {
+  padding-top: var(--spacing-section);
+  padding-bottom: var(--spacing-section);
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+}
+
+.max-w-container {
+  max-width: var(--spacing-container);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-32);
+  padding-right: var(--spacing-32);
+}
+
+.editorial-text {
+  background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.4) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.04em;
+}
+
+.secondary-text {
+  color: var(--color-text-secondary);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.editorial-glass {
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border-subtle);
+  box-shadow: var(--shadow-premium);
+}
+
+.grain::after {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+  animation: grain 12s steps(8) infinite;
+}
+
+@keyframes grain {
+
+  0%,
+  100% {
+    transform: translate(0, 0)
+  }
+
+  25% {
+    transform: translate(-2%, -5%)
+  }
+
+  50% {
+    transform: translate(-4%, 2%)
+  }
+
+  75% {
+    transform: translate(2%, -3%)
+  }
+}
+
+/* Section Separator */
+.section-divider {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, transparent, var(--color-border-subtle), transparent);
+}
+
+/* Shimmer Effect - Optimized */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.02) 50%,
+      transparent 100%);
+  animation: shimmer 12s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
