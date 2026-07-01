@@ -56,7 +56,6 @@ export default function Projects() {
            </div>
            
            <div className="flex flex-col items-end gap-2 translate-y-1">
-              <span className="text-[7rem] font-bold editorial-text opacity-10 leading-none">Index_{PROJECTS.length}</span>
               <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-white/10">System_Output_01</span>
            </div>
         </div>

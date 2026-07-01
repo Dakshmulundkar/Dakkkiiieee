@@ -99,7 +99,7 @@ export default function Footer() {
          </div>
          
          <div className="flex items-center gap-6">
-            <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">Engine: Antigravity v6.0</span>
+            <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">Engine: Core Production v6.1</span>
             <div className="w-12 h-[1px] bg-sky-500/30" />
             <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/40">Verified SSL Production</span>
          </div>
