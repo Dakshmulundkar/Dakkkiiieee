@@ -1,91 +1,158 @@
-import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import SectionHeading from '@/components/ui/SectionHeading';
-import AnimatedCounter from '@/components/ui/AnimatedCounter';
-import GlassCard from '@/components/ui/GlassCard';
-import { STATS, ABOUT_TEXT } from '@/data/personal';
-import { FiUser, FiBookOpen, FiTarget, FiHeart } from 'react-icons/fi';
+import { cn } from '@/lib/utils';
 
-const aboutBlocks = [
-  { icon: FiUser, title: 'Who I Am', text: ABOUT_TEXT.intro },
-  { icon: FiBookOpen, title: 'My Journey', text: ABOUT_TEXT.journey },
-  { icon: FiTarget, title: 'Education', text: ABOUT_TEXT.education },
-  { icon: FiHeart, title: 'My Passion', text: ABOUT_TEXT.passion },
+const INTERESTS = [
+  "Full-Stack Development",
+  "Cloud Computing",
+  "DevOps",
+  "Artificial Intelligence"
 ];
 
+const STATS_DATA = [
+  { value: 30, label: "Projects Built", suffix: "+" },
+  { value: 252, label: "GitHub Contributions", suffix: "+" },
+  { value: 2, label: "Freelance Clients", suffix: "" },
+  { value: 4, label: "AWS Certifications", suffix: "" }
+];
+
+function Counter({ value, suffix }: { value: number; suffix: string }) {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
+  useEffect(() => {
+    if (isInView) {
+      let start = 0;
+      const end = value;
+      const duration = 2000;
+      let startTime: number | null = null;
+
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        setCount(Math.floor(progress * end));
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        }
+      };
+      requestAnimationFrame(animate);
+    }
+  }, [isInView, value]);
+
+  return <span ref={ref}>{count}{suffix}</span>;
+}
+
 export default function About() {
+  const mouseX = useSpring(0, { stiffness: 50, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 50, damping: 20 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const x = (clientX - left) / width - 0.5;
+    const y = (clientY - top) / height - 0.5;
+    mouseX.set(x * 20);
+    mouseY.set(y * 20);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const ABOUT_TEXT = {
+    intro: "Based in Mumbai, I am a Final Year Computer Science student at A.P. Shah Institute of Technology (APSIT) with a focus on engineering high-performance digital logic.",
+  };
+
   return (
-    <section id="about" className="section-padding relative overflow-hidden">
-      <div className="max-w-container mx-auto">
-        <SectionHeading title="About Me" subtitle="Intentional Engineering" align="left" />
+    <section id="about" className="py-24 md:py-40 relative overflow-hidden bg-bg-primary">
+      <div className="max-w-container mx-auto px-8 relative z-10">
+        <SectionHeading title="About" subtitle="Entity_Bios" align="left" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 lg:gap-32 mt-24">
-          {/* Left Column — Portrait Treatment */}
-          <motion.div
-            className="lg:col-span-5 relative"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-          >
-            {/* Portrait Frame — Deep Minimalist */}
-            <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden border border-white/5 bg-bg-secondary group shimmer">
-              <div
-                className="absolute inset-0 opacity-10 grayscale group-hover:grayscale-0 transition-all duration-1000 scale-105 group-hover:scale-100"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(56,189,248,0.1) 0%, rgba(5,5,5,1) 80%)',
-                }}
-              />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                 <span className="text-[12rem] font-bold opacity-5 editorial-text font-display">DM</span>
-              </div>
-              
-              {/* Floating ID Tag — Precision Detail */}
-              <div className="absolute top-8 left-8 px-6 py-3 bg-black/40 backdrop-blur-xl rounded-full border border-white/5">
-                 <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/60">Production Engineer</span>
-              </div>
-            </div>
+        <div className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+          
+          {/* Sticky Portrait Sidebar */}
+          <div className="lg:col-span-5 lg:sticky lg:top-32">
+             <motion.div 
+               onMouseMove={handleMouseMove}
+               onMouseLeave={handleMouseLeave}
+               style={{ rotateX: useTransform(mouseY, (v) => -v), rotateY: useTransform(mouseX, (v) => v), transformStyle: "preserve-3d" }}
+               className="relative aspect-[4/3] rounded-[32px] overflow-hidden border border-white/10 bg-white/[0.01] group shadow-xl"
+             >
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+                
+                {/* Photo Placeholder */}
+                <div className="absolute inset-0 flex items-center justify-center text-white/5 font-mono text-[9px] uppercase tracking-[0.4em]">
+                   [ Portrait_Image ]
+                </div>
 
-            {/* Premium Stats Row */}
-            <div className="grid grid-cols-2 gap-6 mt-12">
-              {STATS.map((stat, i) => (
-                <div key={i} className="p-10 rounded-[24px] border border-white/5 bg-white/[0.01] hover:bg-white/[0.02] transition-colors">
-                  <AnimatedCounter
-                    value={stat.value}
-                    suffix={stat.suffix}
-                    className="text-4xl font-bold editorial-text"
-                    label={stat.label}
-                    labelClassName="text-[10px] uppercase tracking-[0.4em] text-text-muted font-mono mt-3"
-                  />
+                <div className="absolute bottom-8 left-8">
+                   <h4 className="text-xl font-bold text-white tracking-widest uppercase">D.MULUNDKAR</h4>
+                   <p className="text-[10px] font-mono text-sky-400 uppercase tracking-widest mt-1 opacity-60">Computer Engineer</p>
                 </div>
-              ))}
-            </div>
-          </motion.div>
+             </motion.div>
+          </div>
 
-          {/* Right Column — Editorial Content */}
-          <div className="lg:col-span-7 flex flex-col justify-center gap-16">
-            {aboutBlocks.map((block, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: i * 0.15, ease: [0.19, 1, 0.22, 1] }}
-                className="flex items-start gap-10 group"
-              >
-                <div
-                  className="flex-shrink-0 w-12 h-12 rounded-2xl flex items-center justify-center bg-white/[0.03] border border-white/5 group-hover:bg-sky-500/10 group-hover:border-sky-500/20 transition-all duration-500"
-                >
-                  <block.icon className="w-5 h-5 text-text-muted group-hover:text-sky-400 transition-colors" />
+          {/* Right Column: Narrative */}
+          <div className="lg:col-span-7 flex flex-col gap-12">
+             
+             {/* Part 1: ME */}
+             <div className="space-y-6">
+                <span className="text-[10px] font-mono text-sky-400 uppercase tracking-[0.4em] font-bold">ME</span>
+                <h2 className="text-2xl md:text-4xl font-bold tracking-tight text-white leading-tight">
+                   From ideas to <br /> 
+                   production-ready <span className="text-sky-400">software.</span>
+                </h2>
+                <div className="space-y-4 text-base text-text-secondary leading-relaxed font-light">
+                   <p>
+                      Hi, I'm Daksh, a Computer Engineering student specializing in building production-ready digital systems. Every project I build begins with a problem worth solving and ends with a product people can use. I enjoy transforming ideas into scalable, intuitive applications through thoughtful engineering—whether it's building AI-powered systems, cloud-native platforms, DevSecOps tools, or modern full-stack web experiences.
+                   </p>
+                   <p>
+                      I believe great software balances functionality, performance, and user experience. That's why I'm constantly exploring new technologies, refining my skills, and building products that are not only technically sound but also enjoyable to use.
+                   </p>
                 </div>
-                <div className="space-y-4">
-                  <h3 className="text-xl font-bold uppercase tracking-widest text-white/90" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-                    {block.title}
-                  </h3>
-                  <p className="secondary-text">
-                    {block.text}
-                  </p>
+             </div>
+
+             {/* Part 2: INTERESTS */}
+             <div className="space-y-4">
+                <span className="text-[10px] font-mono text-sky-400 uppercase tracking-[0.4em] font-bold">INTERESTS</span>
+                <div className="flex flex-wrap gap-2">
+                   {INTERESTS.map((interest, i) => (
+                      <motion.span
+                        key={interest}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="px-3 py-1.5 rounded-full bg-white/5 border border-white/5 text-[10px] font-mono uppercase tracking-widest text-white/40 hover:text-sky-400 hover:border-sky-500/20 transition-all duration-300"
+                      >
+                         {interest}
+                      </motion.span>
+                   ))}
                 </div>
-              </motion.div>
-            ))}
+             </div>
+
+             {/* Part 3: TELEMETRY (Stats) */}
+             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-white/5 font-mono">
+                {STATS_DATA.map((stat, i) => (
+                   <motion.div
+                     key={stat.label}
+                     initial={{ opacity: 0, y: 10 }}
+                     whileInView={{ opacity: 1, y: 0 }}
+                     transition={{ delay: i * 0.1 }}
+                     className="space-y-1"
+                   >
+                      <div className="text-xl font-bold text-white leading-none">
+                         <Counter value={stat.value} suffix={stat.suffix} />
+                      </div>
+                      <div className="text-[7px] uppercase tracking-widest text-text-muted leading-tight">
+                         {stat.label}
+                      </div>
+                   </motion.div>
+                ))}
+             </div>
+
           </div>
         </div>
       </div>

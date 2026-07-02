@@ -152,7 +152,7 @@ export default function Navbar() {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-[600] flex items-center justify-center bg-bg-primary/95 backdrop-blur-2xl"
+            className="fixed inset-0 z-[600] flex items-center justify-center bg-bg-primary backdrop-blur-2xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -161,16 +161,25 @@ export default function Navbar() {
               {NAV_ITEMS.map((item, i) => (
                 <motion.button
                   key={item.href}
-                  onClick={() => handleNavClick(item.href)}
+                  onClick={() => handleNavClick(item.href === '#projects' ? '/projects' : item.href)}
                   className="text-4xl font-bold text-text-primary hover:text-sky-400"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.05 }}
                 >
                   {item.label}
                 </motion.button>
               ))}
+              <motion.button
+                onClick={() => handleNavClick('/projects')}
+                className="text-[10px] font-mono uppercase tracking-[0.5em] text-sky-400 mt-4 px-8 py-3 border border-sky-400/20 rounded-full"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: NAV_ITEMS.length * 0.05 }}
+              >
+                Access_Vault
+              </motion.button>
             </div>
           </motion.div>
         )}

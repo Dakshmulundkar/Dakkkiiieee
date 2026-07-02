@@ -1,9 +1,11 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 import type { Project } from '@/types';
 import MagneticButton from '@/components/ui/MagneticButton';
 import TiltCard from '@/components/ui/TiltCard';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/useMediaQuery';
 
 interface ProjectCardProps {
   project: Project;
@@ -12,102 +14,121 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project, index }: ProjectCardProps) {
   const isEven = index % 2 === 0;
+  const isMobile = useIsMobile();
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"]
+  });
+
+  const yImage = useTransform(scrollYProgress, [0, 1], [0, -40]);
+  const yNumber = useTransform(scrollYProgress, [0, 1], [-100, 100]);
 
   return (
-    <div className="w-[100vw] h-screen flex-shrink-0 flex items-center justify-center px-8 md:px-24 lg:px-40 relative overflow-hidden">
+    <div ref={cardRef} className={cn(
+      "w-full flex-shrink-0 flex items-center justify-center relative overflow-hidden",
+      isMobile ? "py-12 px-6" : "w-[100vw] h-screen px-8 md:px-24 lg:px-40"
+    )}>
       {/* Editorial Decorative Background Number - Massive for subtle texture */}
-      <span className="absolute top-[10%] right-[10%] text-[30rem] font-bold text-white/[0.01] select-none pointer-events-none font-display leading-none">
-        0{index + 1}
-      </span>
+      {!isMobile && (
+        <motion.span 
+          style={{ y: yNumber }}
+          className="absolute top-[10%] right-[10%] text-[30rem] font-bold text-white/[0.01] select-none pointer-events-none font-display leading-none"
+        >
+          0{index + 1}
+        </motion.span>
+      )}
 
       <div className={cn(
-        "w-full max-w-container flex flex-col md:flex-row items-center gap-20 lg:gap-32",
-        !isEven && "md:flex-row-reverse"
+        "w-full max-w-container grid grid-cols-1 lg:grid-cols-12 items-center gap-12 lg:gap-16 whitespace-normal",
+        !isEven && "lg:direction-reverse"
       )}>
-        {/* Project Visual Showcase — Using Tilt for Premium Interaction */}
+        {/* Project Visual Showcase */}
         <motion.div 
-          className="w-full md:w-[60%] relative"
-          initial={{ opacity: 0, y: 60 }}
+          className={cn(
+            "w-full lg:col-span-7 relative",
+            !isEven ? "lg:order-2" : "lg:order-1"
+          )}
+          initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+          transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
         >
-          <TiltCard className="rounded-[40px] overflow-hidden border border-white/10 shadow-premium group">
-            <div className="aspect-[16/10] relative overflow-hidden">
-               {/* Real Image Tag for better compatibility and performance */}
-               <img 
+          <TiltCard className="rounded-[32px] md:rounded-[48px] overflow-hidden border border-white/10 shadow-premium group">
+            <div className="aspect-video relative overflow-hidden">
+               <motion.img 
+                 style={{ y: isMobile ? 0 : yImage }}
                  src={project.image} 
                  alt={project.title}
                  className={cn(
-                    "absolute inset-0 w-full h-full transition-transform duration-[2000ms] ease-[0.19, 1, 0.22, 1] group-hover:scale-110",
-                    project.id === 'pipelinexr' ? "object-cover scale-100" : "object-cover"
+                    "absolute -top-[10%] left-0 w-full h-[120%] object-cover transition-transform duration-[2000ms] ease-[0.19, 1, 0.22, 1] group-hover:scale-105",
+                    project.id === 'pipelinexr' ? "scale-100" : "scale-105"
                  )}
                />
-               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60" />
-               
-               {/* Floating Interaction Indicator */}
-               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700 backdrop-blur-[2px]">
-                  <div className="w-24 h-24 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-xl scale-90 group-hover:scale-100 transition-transform duration-700">
-                     <FiExternalLink className="text-white w-8 h-8" />
-                  </div>
-               </div>
+               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60" />
             </div>
           </TiltCard>
           
-          {/* Decorative Floating Tech Badge */}
           <div className={cn(
-             "absolute -bottom-6 z-10 px-6 py-3 bg-black/40 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl",
-             isEven ? "-right-6" : "-left-6"
+             "absolute -bottom-4 z-10 px-5 py-2.5 bg-black/60 backdrop-blur-3xl rounded-full border border-white/10 shadow-2xl",
+             isEven ? "-right-4" : "-left-4"
           )}>
-             <span className="text-[10px] font-mono text-sky-400 font-bold uppercase tracking-widest">{project.category}</span>
+             <span className="text-[9px] font-mono text-sky-400 font-bold uppercase tracking-widest">{project.category}</span>
           </div>
         </motion.div>
 
         {/* Project Technical Details */}
-        <div className="w-full md:w-[40%] flex flex-col items-start gap-12">
-          <div className="space-y-8">
+        <div className={cn(
+          "w-full lg:col-span-5 flex flex-col items-start gap-8",
+          !isEven ? "lg:order-1 lg:pr-12" : "lg:order-2 lg:pl-10"
+        )}>
+          <div className="space-y-6">
             <motion.div 
               className="flex items-center gap-4"
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -10 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.3 }}
+              transition={{ duration: 1, delay: 0.2 }}
             >
-              <div className="w-12 h-[1px] bg-sky-500/50" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-white/40 font-bold">
-                Feature_Protocol_0{index + 1}
+              <div className="w-8 h-[1px] bg-sky-500/50" />
+              <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30 font-bold">
+                Project_{index + 1}
               </span>
             </motion.div>
             
-            <h3 className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter editorial-text" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-white leading-tight break-words" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
               {project.title}
             </h3>
             
-            <p className="text-lg text-text-secondary max-w-lg leading-relaxed font-light">
+            <p className="text-base md:text-lg text-text-secondary max-w-sm md:max-w-md lg:max-w-[400px] leading-relaxed font-light break-words">
               {project.description}
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2.5">
-            {project.tech.slice(0, 5).map((t) => (
-              <span key={t} className="px-4 py-2 rounded-full bg-white/[0.03] border border-white/5 text-[9px] font-mono text-white/60 uppercase tracking-widest">
+          <div className="flex flex-wrap gap-2">
+            {project.tech.slice(0, 4).map((t) => (
+              <span 
+                key={t} 
+                className="px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/5 text-[8px] font-mono text-white/50 uppercase tracking-widest"
+              >
                 {t}
               </span>
             ))}
           </div>
 
-          <div className="flex items-center gap-6 pt-10">
+          <div className="flex items-center gap-6 pt-6">
             {project.github && (
-              <MagneticButton href={project.github} target="_blank" className="bg-transparent border-white/10 hover:border-white/30 px-10 py-5 rounded-full transition-all">
+              <MagneticButton href={project.github} target="_blank" className="bg-transparent border-white/10 hover:border-white/20 px-8 py-4 rounded-full transition-all">
                 <FiGithub className="w-4 h-4" />
-                <span className="text-[10px] uppercase tracking-[0.3em] font-mono">Source</span>
+                <span className="text-[9px] uppercase tracking-[0.2em] font-mono">Code</span>
               </MagneticButton>
             )}
             {project.live && (
               <MagneticButton 
                 href={project.live} 
                 target="_blank" 
-                className="bg-white text-bg-primary hover:bg-sky-400 hover:text-white border-none px-12 py-5 rounded-full shadow-premium hover:shadow-hover transition-all"
+                className="bg-white text-bg-primary hover:bg-sky-400 hover:text-white border-none px-10 py-4 rounded-full shadow-premium transition-all"
               >
-                <span className="text-[10px] uppercase tracking-[0.3em] font-mono font-bold">Launch Project</span>
+                <span className="text-[9px] uppercase tracking-[0.2em] font-mono font-bold">Live Portal</span>
               </MagneticButton>
             )}
           </div>

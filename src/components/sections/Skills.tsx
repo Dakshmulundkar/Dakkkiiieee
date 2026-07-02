@@ -2,34 +2,41 @@ import { useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES, SKILLS } from '@/data/skills';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { cn } from '@/lib/utils';
-
 const Scene = lazy(() => import('@/components/three/Scene'));
 const TechOrbit = lazy(() => import('@/components/three/TechOrbit'));
+import { useIsMobile } from '@/hooks/useMediaQuery';
+import { cn } from '@/lib/utils';
 
 export default function Skills() {
+  const isMobile = useIsMobile();
+  
   return (
-    <section id="skills" className="py-32 relative overflow-hidden bg-bg-primary">
+    <section id="skills" className="py-24 md:py-32 relative overflow-hidden bg-bg-primary">
       {/* Decorative Background Element */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-sky-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
+      <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-sky-500/5 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
       
       <div className="max-w-container mx-auto relative z-10 px-8">
-        <div className="flex flex-col lg:flex-row gap-20 items-start">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-start">
           
           {/* Left Side: Editorial Intro & 3D Element */}
-          <div className="lg:w-1/3 sticky top-32">
+          <div className={cn(
+            "lg:w-1/3",
+            !isMobile && "sticky top-32"
+          )}>
             <SectionHeading title="Technical Core" subtitle="Stack Architecture" align="left" />
             <p className="text-text-secondary mt-8 text-lg font-light leading-relaxed max-w-sm">
               My technical foundation is built on the principles of scalability, performance, and type-safety. I architect systems that bridge the gap between high-level logic and low-level efficiency.
             </p>
             
-            <div className="mt-12 w-full aspect-square relative rounded-3xl overflow-hidden bg-white/[0.02] border border-white/5">
-                <Suspense fallback={<div className="w-full h-full flex items-center justify-center font-mono text-[10px] opacity-20">Loading_Visualizer...</div>}>
-                    <Scene camera={{ position: [0, 0, 5], fov: 40 }}>
-                        <TechOrbit />
-                    </Scene>
-                </Suspense>
-            </div>
+            {!isMobile && (
+              <div className="mt-12 w-full aspect-square relative rounded-3xl overflow-hidden bg-white/[0.02] border border-white/5">
+                  <Suspense fallback={<div className="w-full h-full flex items-center justify-center font-mono text-[10px] opacity-20">Loading_Visualizer...</div>}>
+                      <Scene camera={{ position: [0, 0, 5], fov: 40 }}>
+                          <TechOrbit />
+                      </Scene>
+                  </Suspense>
+              </div>
+            )}
           </div>
 
           {/* Right Side: High-End Modular Grid */}

@@ -49,7 +49,7 @@ export default function Hero() {
            transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
         >
           <span className="text-[10px] font-mono tracking-[0.5em] uppercase text-sky-400 font-bold">
-            Systems Architect
+            Computer Engineer
           </span>
           <div className="w-[1px] h-16 bg-gradient-to-b from-sky-500/50 to-transparent" />
         </motion.div>

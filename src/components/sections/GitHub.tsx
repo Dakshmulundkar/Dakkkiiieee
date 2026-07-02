@@ -37,7 +37,12 @@ export default function GitHub() {
                <div className="flex items-center gap-4 text-[9px] font-mono text-white/20 uppercase tracking-widest">
                   <div className="flex gap-1.5 items-center">
                     <span>Low</span>
-                    <div className="flex gap-1"><div className="w-2 h-2 bg-white/5"/><div className="w-2 h-2 bg-sky-500/20"/><div className="w-2 h-2 bg-sky-500/50"/><div className="w-2 h-2 bg-sky-500"/></div>
+                    <div className="flex gap-1">
+                        <div className="w-2 h-2 bg-white/5"/>
+                        <div className="w-2 h-2 bg-red-950/60"/>
+                        <div className="w-2 h-2 bg-red-700/80"/>
+                        <div className="w-2 h-2 bg-red-500"/>
+                    </div>
                   </div>
                </div>
             </div>
@@ -46,8 +51,7 @@ export default function GitHub() {
                 <img 
                   src={`https://ghchart.rshah.org/38bdf8/${username}`} 
                   alt={`${username}'s Github Chart`}
-                  className="w-full opacity-60 group-hover:opacity-100 transition-all duration-700 invert brightness-150 grayscale group-hover:grayscale-0 scale-[0.98] group-hover:scale-100"
-                  style={{ filter: 'hue-rotate(180deg) brightness(1.7) contrast(1.1)' }}
+                  className="w-full opacity-40 group-hover:opacity-100 transition-all duration-700 invert brightness-125 grayscale group-hover:grayscale-0 scale-[0.99] group-hover:scale-100"
                 />
             </div>
             
@@ -66,13 +70,13 @@ export default function GitHub() {
           {/* RIGHT: COMPACT REPOS WITH DESCRIPTION */}
           <div className="lg:w-[400px] flex flex-col gap-3">
              {[
-               { name: 'PipelineXR', lang: 'TS', desc: 'Enterprise observability and orchestration.' },
+               { name: 'Fortis-CI', lang: 'TS', desc: 'Self-hosted deployment observability platform powered by Neo4j. Tracks pipelines as a graph.' },
                { name: 'STANS', lang: 'GO', desc: 'Graph-based navigation service.' },
-               { name: 'Fortis-CI', lang: 'TS', desc: 'Self-hosted deployment observability platform powered by Neo4j. Tracks pipelines as a graph.' }
+               { name: 'PipelineXR', lang: 'TS', desc: 'Enterprise observability and orchestration.' }
              ].map((repo, i) => (
                 <a 
                   key={i} 
-                  href={repo.name === 'Fortis-CI' ? 'https://github.com/Dakshmulundkar/Fortis-CI' : `https://github.com/${username}/${repo.name}`}
+                  href={`https://github.com/${username}/${repo.name}`}
                   target="_blank"
                   className="p-5 rounded-2xl border border-white/5 bg-white/[0.01] hover:bg-sky-500/10 hover:border-sky-500/20 transition-all group"
                 >

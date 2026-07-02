@@ -7,11 +7,13 @@ import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/layout/CustomCursor';
 import Background from '@/components/layout/Background';
 import { FiGrid, FiList, FiArrowLeft, FiGithub } from 'react-icons/fi';
+import { useIsMobile } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
 
 export default function ProjectsPage() {
   const [viewMode, setViewMode] = useState<'editorial' | 'grid'>('editorial');
   const containerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Scroll to top on mount
   useEffect(() => {
@@ -25,7 +27,10 @@ export default function ProjectsPage() {
       <Navbar />
 
       {/* View Toggle / Header */}
-      <div className="fixed top-40 right-12 z-[601] flex items-center gap-4">
+      <div className={cn(
+        "fixed z-[601] flex items-center gap-4",
+        isMobile ? "top-28 right-6" : "top-40 right-12"
+      )}>
          <div className="flex bg-white/5 backdrop-blur-xl border border-white/10 rounded-full p-1 shadow-premium">
             <button 
                onClick={() => setViewMode('editorial')}
@@ -57,16 +62,19 @@ export default function ProjectsPage() {
                exit={{ opacity: 0 }}
                className="flex flex-col"
             >
-               <div className="pt-56 px-12 md:px-24">
-                  <h1 className="text-6xl md:text-8xl font-bold tracking-tighter editorial-text" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+               <div className={cn(
+                 "px-8 md:px-24",
+                 isMobile ? "pt-36" : "pt-44"
+               )}>
+                  <h1 className="text-[clamp(2.5rem,6vw,4.5rem)] font-bold tracking-tighter editorial-text" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
                      The Vault.
                   </h1>
-                  <p className="text-text-secondary mt-8 max-w-xl text-lg font-light leading-relaxed">
+                  <p className="text-text-secondary mt-4 max-w-xl text-base font-light leading-relaxed">
                      A selection of my architectural responses to complex engineering challenges. Scrolls vertically for a deep dive into each case study.
                   </p>
                </div>
                
-               <div className="flex flex-col divide-y divide-white/5 mt-20">
+               <div className="flex flex-col divide-y divide-white/5 mt-12">
                   {PROJECTS.map((project, index) => (
                      <ProjectCaseStudyCard key={project.id} project={project} index={index} />
                   ))}

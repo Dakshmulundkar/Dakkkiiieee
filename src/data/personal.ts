@@ -9,10 +9,10 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 export const STATS: Stat[] = [
-  { label: 'Public Projects', value: 30, suffix: '+' },
-  { label: 'Contributions', value: 252, suffix: '+' },
-  { label: 'Freelance Clients', value: 2, suffix: '' },
-  { label: 'Certifications', value: 4, suffix: '' },
+  { label: 'Technical Evolution', value: 6, suffix: 'y+' },
+  { label: 'System Efficiency', value: 30, suffix: '%' },
+  { label: 'Core Deployments', value: 10, suffix: '+' },
+  { label: 'Engineering Year', value: 4, suffix: 'th' },
 ];
 
 export const SOCIAL_LINKS: SocialLink[] = [
@@ -23,24 +23,24 @@ export const SOCIAL_LINKS: SocialLink[] = [
 
 export const PERSONAL_INFO = {
   name: 'Daksh Mulundkar',
-  title: 'Software Engineer | Full-Stack Developer | Cloud & AI Enthusiast',
+  title: 'Computer Engineer | Final Year | Optimization Lead',
   location: 'Mumbai, Maharashtra, India',
   email: 'bydaksh2806@gmail.com',
   phone: '+91 7208677382',
-  university: 'University of Mumbai',
-  degree: 'Bachelor of Engineering in Computer Engineering',
-  graduation: '2027',
+  university: 'A.P. Shah Institute of Technology (APSIT)',
+  degree: 'Bachelor of Engineering in Computer Science',
+  graduation: '2025',
 };
 
 export const HERO_TITLES = [
-  'Software Engineer',
-  'Full-Stack Developer',
-  'Cloud & AI Enthusiast',
+  'Computer Engineer',
+  'Final Year @ APSIT',
+  'Optimization Specialist',
 ];
 
 export const ABOUT_TEXT = {
-  intro: "I am a Computer Engineering student passionate about building production-quality software rather than just academic projects.",
-  journey: "I enjoy designing scalable applications, modern UI/UX, backend systems, cloud infrastructure, DevOps workflows, and AI-powered solutions. My goal is to become a Software Engineer at top-tier product-based companies.",
-  education: "Currently pursuing a Bachelor of Engineering in Computer Engineering at the University of Mumbai, expected graduation 2027.",
-  passion: "I value clean architecture, maintainable code, modern UI, automation, and excellent developer experience. I am committed to continuous learning and engineering excellence.",
+  intro: "Based in Mumbai, I am a Final Year Computer Science student at A.P. Shah Institute of Technology (APSIT) with a focus on engineering high-performance digital logic.",
+  journey: "My technical path started with a curiosity for systems, leading to my first major project, Zayra, during my first year. Since then, I have evolved into an Engineering Lead, managing team deployments and achieving verified 30% increases in system efficiency.",
+  education: "Currently completing my final year of Bachelor of Engineering at APSIT (University of Mumbai), specializing in scalable architecture and full-stack system optimization.",
+  mission: "I specialize in transforming complex academic and business requirements into production-grade execution, prioritizing clean code and high-impact performance workflows.",
 };

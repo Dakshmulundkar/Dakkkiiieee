@@ -100,7 +100,7 @@ body {
 }
 
 .editorial-text {
-  background: linear-gradient(135deg, #ffffff 40%, rgba(255, 255, 255, 0.4) 100%);
+  background: linear-gradient(135deg, #ffffff 60%, rgba(255, 255, 255, 0.5) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -151,6 +151,20 @@ body {
 
   75% {
     transform: translate(2%, -3%)
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE PERFORMANCE OVERRIDES
+   ═══════════════════════════════════════════════════ */
+
+@media (pointer: coarse) {
+  .grain::after {
+    display: none;
+  }
+  
+  .shimmer::after {
+    display: none;
   }
 }
 

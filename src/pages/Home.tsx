@@ -11,7 +11,6 @@ import CommandPalette from '@/components/ui/CommandPalette';
 // Lazy load sections for better initial performance
 const Hero = lazy(() => import('@/components/sections/Hero'));
 const About = lazy(() => import('@/components/sections/About'));
-const Philosophy = lazy(() => import('@/components/sections/Philosophy'));
 const Projects = lazy(() => import('@/components/sections/Projects'));
 const Experience = lazy(() => import('@/components/sections/Experience'));
 const Skills = lazy(() => import('@/components/sections/Skills'));
