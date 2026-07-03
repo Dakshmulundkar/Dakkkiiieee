@@ -1,103 +1,145 @@
 import { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import { EXPERIENCES } from '@/data/experience';
 import SectionHeading from '@/components/ui/SectionHeading';
-import GlassCard from '@/components/ui/GlassCard';
-import { FiBriefcase, FiAward, FiStar } from 'react-icons/fi';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
 
 export default function Experience() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end center"]
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <section id="experience" className="py-24 md:py-[160px] relative overflow-hidden bg-bg-secondary/50">
-      <div className="max-w-7xl mx-auto px-6">
-        <SectionHeading title="Career Logic" subtitle="Experience Pipeline" align={isMobile ? "left" : "center"} />
+    <section id="experience" className="pt-32 pb-[200px] relative bg-bg-primary overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.03)_0%,transparent_70%)] pointer-events-none" />
 
-        <div className={cn(
-          "relative mt-16 md:mt-32 space-y-12 md:space-y-[128px]",
-          isMobile && "ml-4 pl-8 border-l border-white/5"
-        )}>
-          {/* Central Timeline Vector (Desktop) */}
-          {!isMobile && (
-            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-sky-500/0 via-sky-500/30 to-sky-500/0" />
-          )}
+      <div className="max-w-5xl mx-auto px-8 relative">
+        <SectionHeading 
+          title="Engineering Journey" 
+          subtitle="Timeline_Schematic" 
+          align="center" 
+        />
 
-          {EXPERIENCES.map((exp, i) => (
-            <ExperienceItem key={exp.id} exp={exp} index={i} />
-          ))}
+        <div ref={containerRef} className="relative mt-8 md:mt-12">
+          {/* Central Diagram Line (Persistent Growth) */}
+          <motion.div 
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: [0.19, 1, 0.22, 1] }}
+            className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[1px] bg-gradient-to-b from-sky-500 via-sky-500/50 to-transparent origin-top z-0"
+          />
+
+          <div className="space-y-20 md:space-y-24">
+            {EXPERIENCES.map((exp, index) => (
+              <TimelineEntry key={exp.id} exp={exp} index={index} isMobile={isMobile} />
+            ))}
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-function ExperienceItem({ exp, index }: { exp: any; index: number }) {
-  const isMobile = useIsMobile();
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-20%' });
+function TimelineEntry({ exp, index, isMobile }: { exp: any; index: number; isMobile: boolean }) {
   const isEven = index % 2 === 0;
-
-  return (
-    <div ref={ref} className="relative flex flex-col md:flex-row items-center gap-8 md:gap-16 lg:gap-24">
-      {/* Precision Timeline Node */}
-      <div className={cn(
-        "absolute w-[6px] h-[6px] rounded-full bg-sky-400 z-20 transition-all duration-1000 shadow-[0_0_15px_rgba(56,189,248,0.5)]",
-        isMobile ? "-left-[35px] top-10" : "left-1/2 -translate-x-1/2",
-        isInView ? "scale-100 opacity-100" : "scale-0 opacity-0"
-      )} />
-
-      {/* Experience Payload — Luxury Card */}
-      <div className={cn(
-        "w-full md:w-[45%] transition-all duration-1000",
-        !isMobile && (isEven ? "md:mr-auto" : "md:ml-auto"),
-        isInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-16"
-      )}>
-        <div className={cn(
-          "rounded-[24px] border border-white/5 bg-bg-card hover:bg-bg-card/60 backdrop-blur-xl transition-all duration-700 group",
-          isMobile ? "p-6" : "p-12"
-        )}>
-          <div className="flex flex-col gap-6 md:gap-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
-               <div className="space-y-2">
-                  <h3 className="text-xl md:text-3xl font-bold editorial-text" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>{exp.role}</h3>
-                  <div className="flex items-center gap-4">
-                    <p className="text-sky-400 font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] font-bold">{exp.company}</p>
-                    <div className="w-1 h-1 rounded-full bg-white/10" />
-                    <span className="text-white/30 text-[8px] md:text-[9px] font-mono uppercase tracking-widest">{exp.type}</span>
-                  </div>
-               </div>
-               <span className="text-text-muted text-[8px] md:text-[10px] font-mono uppercase tracking-widest bg-white/[0.03] px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/5 w-fit">{exp.period}</span>
-            </div>
-
-            <p className="text-text-secondary text-sm md:text-base leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity">
-              {exp.description}
-            </p>
-
-            <div className="flex flex-wrap gap-2 md:gap-3 pt-2 md:pt-4">
-               {exp.achievements.map((achievement: string, i: number) => (
-                  <div key={i} className="flex items-center gap-2 md:gap-3 bg-white/[0.02] border border-white/5 pl-2 pr-3 md:pr-4 py-1 md:py-1.5 rounded-full">
-                     <div className="w-1 md:w-1.5 h-1 md:h-1.5 rounded-full bg-sky-500/40" />
-                     <span className="text-[8px] md:text-[10px] font-mono text-text-muted uppercase tracking-wider">
-                        {achievement}
-                     </span>
-                  </div>
-               ))}
-            </div>
-          </div>
+  
+  const content = (
+    <>
+      {/* Node Point (Pulsing Synapse - RESTORED) */}
+      <div className="absolute left-0 md:left-1/2 -translate-x-1/2 w-3.5 h-3.5 z-20 top-1/2 -translate-y-1/2 cursor-pointer">
+        <div className="absolute inset-0 rounded-full bg-sky-400 blur-[1px] opacity-20 animate-pulse" />
+        <div className="relative w-full h-full rounded-full bg-bg-primary border border-sky-400/50 flex items-center justify-center group-hover:border-sky-400 transition-colors">
+            <div className="w-1.5 h-1.5 rounded-full bg-sky-400" />
         </div>
       </div>
 
-      {/* Background Vertical Text (Desktop Decoration) */}
+      {/* Empty space for opposite side on desktop */}
+      {!isMobile && <div className="md:w-1/2" />}
+
+      {/* Horizontal Bridge Line (Circuit Connector) */}
       {!isMobile && (
+        <motion.div 
+          variants={{
+            initial: { width: 0, opacity: 0 },
+            animate: { width: 64, opacity: 1 }
+          }}
+          transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1], delay: 0.2 }}
+          className={cn(
+            "absolute top-1/2 left-1/2 h-[1px] bg-sky-500/20 group-hover:bg-sky-500/40 transition-colors",
+            isEven ? "origin-left" : "origin-right -translate-x-full"
+          )}
+        />
+      )}
+
+      {/* Content Container */}
+      <div className={cn(
+        "w-full md:w-1/2 pl-12 md:pl-0",
+        !isMobile && (isEven ? "md:pl-16 text-left" : "md:pr-16 text-right")
+      )}>
+         <motion.div 
+           variants={{
+             initial: { x: isEven ? -10 : 10, opacity: 0 },
+             animate: { x: 0, opacity: 1 }
+           }}
+           transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1], delay: 0.2 }}
+           className="flex flex-col gap-0.5"
+         >
+            <span className="text-[10px] font-mono text-white/20 uppercase tracking-[0.3em] mb-0.5">
+               {exp.date}
+            </span>
+            <div className="relative inline-block cursor-pointer">
+                <h3 className="text-base md:text-lg font-semibold text-white leading-tight tracking-tight group-hover:text-sky-400 transition-colors duration-500">
+                    {exp.title}
+                </h3>
+            </div>
+            <span className="text-[10px] font-mono text-sky-400/30 uppercase tracking-[0.2em] mt-0.5 italic">
+               {exp.organizer}
+            </span>
+         </motion.div>
+      </div>
+    </>
+  );
+
+  return (
+    <motion.div 
+      initial="initial"
+      whileInView="animate"
+      viewport={{ once: true, margin: "-100px" }}
+      className="relative w-full group"
+    >
+      {exp.repo ? (
+        <a 
+          href={exp.repo} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className={cn(
+            "flex items-center w-full relative no-underline outline-none transition-all duration-300",
+            !isMobile && (isEven ? "md:flex-row" : "md:flex-row-reverse")
+          )}
+        >
+          {content}
+        </a>
+      ) : (
         <div className={cn(
-          "absolute hidden lg:block text-[10px] font-mono text-white/5 uppercase tracking-[1em] whitespace-nowrap -rotate-90 select-none",
-          isEven ? "left-[52%] translate-x-12" : "right-[52%] -translate-x-12"
+          "flex items-center w-full relative",
+          !isMobile && (isEven ? "md:flex-row" : "md:flex-row-reverse")
         )}>
-          Sequence_{index + 1}
+          {content}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

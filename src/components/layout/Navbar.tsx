@@ -96,7 +96,7 @@ export default function Navbar() {
               {NAV_ITEMS.map((item) => (
                 <button
                   key={item.href}
-                  onClick={() => handleNavClick(item.href === '#projects' ? '/projects' : item.href)}
+                  onClick={() => handleNavClick(item.href)}
                   className={cn(
                     'relative px-5 py-2 text-[10px] uppercase font-mono tracking-[0.3em] transition-all duration-300 rounded-full',
                     activeSection === item.href
@@ -161,7 +161,7 @@ export default function Navbar() {
               {NAV_ITEMS.map((item, i) => (
                 <motion.button
                   key={item.href}
-                  onClick={() => handleNavClick(item.href === '#projects' ? '/projects' : item.href)}
+                  onClick={() => handleNavClick(item.href)}
                   className="text-4xl font-bold text-text-primary hover:text-sky-400"
                   style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   initial={{ opacity: 0, y: 20 }}

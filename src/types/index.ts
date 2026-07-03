@@ -34,12 +34,10 @@ export type SkillCategory =
 
 export interface Experience {
   id: string;
-  role: string;
-  company: string;
-  period: string;
-  description: string;
-  achievements: string[];
-  type: 'work' | 'freelance' | 'hackathon';
+  title: string;
+  organizer: string;
+  date: string;
+  repo?: string;
 }
 
 export interface Certification {
