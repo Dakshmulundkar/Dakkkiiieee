@@ -12,8 +12,18 @@ export default defineConfig({
     },
   },
   build: {
-    chunkSizeWarningLimit: 1000,
-    target: 'es2020',
+    chunkSizeWarningLimit: 600,
+    target: 'esnext',
+    cssMinify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'three-vendor': ['three', '@react-three/fiber', '@react-three/drei'],
+          'framer-vendor': ['framer-motion', 'gsap'],
+          'ui-vendor': ['react-icons', 'clsx', 'tailwind-merge'],
+        }
+      }
+    }
   },
   server: {
     port: 5173,

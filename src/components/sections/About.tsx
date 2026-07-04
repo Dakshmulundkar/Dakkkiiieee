@@ -1,4 +1,12 @@
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { 
+  motion, 
+  useScroll, 
+  useTransform, 
+  useSpring, 
+  useInView, 
+  useMotionValue, 
+  animate 
+} from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
 import SectionHeading from '@/components/ui/SectionHeading';
 import { cn } from '@/lib/utils';
@@ -18,30 +26,30 @@ const STATS_DATA = [
 ];
 
 function Counter({ value, suffix }: { value: number; suffix: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (latest) => Math.floor(latest));
 
   useEffect(() => {
     if (isInView) {
-      let start = 0;
-      const end = value;
-      const duration = 2000;
-      let startTime: number | null = null;
-
-      const animate = (timestamp: number) => {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-        setCount(Math.floor(progress * end));
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-      requestAnimationFrame(animate);
+      const controls = animate(count, value, {
+        duration: 2,
+        ease: [0.19, 1, 0.22, 1],
+      });
+      return controls.stop;
     }
-  }, [isInView, value]);
+  }, [isInView, value, count]);
 
-  return <span ref={ref}>{count}{suffix}</span>;
+  useEffect(() => {
+    return rounded.on("change", (latest) => {
+      if (ref.current) {
+        ref.current.textContent = `${latest}${suffix}`;
+      }
+    });
+  }, [rounded, suffix]);
+
+  return <span ref={ref} className="will-change-transform">0{suffix}</span>;
 }
 
 export default function About() {

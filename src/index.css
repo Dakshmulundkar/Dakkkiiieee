@@ -115,7 +115,7 @@ body {
 
 .editorial-glass {
   background: rgba(10, 10, 10, 0.4);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px); /* Reduced from 12px for better composite performance */
   border: 1px solid var(--color-border-subtle);
   box-shadow: var(--shadow-premium);
 }

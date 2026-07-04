@@ -1,4 +1,4 @@
-import { useRef, lazy, Suspense } from 'react';
+import { useRef, lazy, Suspense, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { SKILL_CATEGORIES, SKILLS } from '@/data/skills';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -8,8 +8,19 @@ import { useIsMobile } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
 import * as SiIcons from 'react-icons/si';
 
+// Optimization: Pre-map icons outside component to avoid repeated object lookups
+const ICON_MAP = SiIcons as Record<string, any>;
+
 export default function Skills() {
   const isMobile = useIsMobile();
+  
+  // Memoize skills filtered by category to prevent recalculation on section re-renders
+  const groupedSkills = useMemo(() => {
+    return SKILL_CATEGORIES.reduce((acc, cat) => {
+      acc[cat.name] = SKILLS.filter(s => s.category === cat.name);
+      return acc;
+    }, {} as Record<string, typeof SKILLS>);
+  }, []);
   
   return (
     <section id="skills" className="py-24 md:py-32 relative overflow-hidden bg-bg-primary">
@@ -48,7 +59,7 @@ export default function Skills() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: i * 0.1 }}
-                 className="group p-5 rounded-[24px] bg-white/[0.01] border border-white/5 hover:border-sky-500/20 hover:bg-white/[0.02] transition-all duration-500"
+                 className="group p-5 rounded-[24px] bg-white/[0.01] border border-white/5 hover:border-sky-500/20 hover:bg-white/[0.02] transition-all duration-500 will-change-transform"
                >
                  <div className="flex items-center gap-4 mb-2">
                     <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5 group-hover:bg-sky-500/10 group-hover:border-sky-500/20 transition-all">
@@ -64,10 +75,10 @@ export default function Skills() {
                  <p className="text-[10px] text-text-muted mb-2 leading-relaxed font-mono uppercase tracking-tight opacity-60">
                     {category.description}
                  </p>
-
+ 
                 <div className="flex flex-wrap gap-2">
-                  {SKILLS.filter(s => s.category === category.name).map((skill) => {
-                    const IconComponent = skill.icon ? (SiIcons as any)[skill.icon] : null;
+                  {(groupedSkills[category.name] || []).map((skill) => {
+                    const IconComponent = skill.icon ? ICON_MAP[skill.icon] : null;
                     
                     return (
                       <span

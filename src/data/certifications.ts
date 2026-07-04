@@ -7,7 +7,7 @@ export const CERTIFICATIONS: Certification[] = [
     issuer: 'AWS Academy',
     date: '2024',
     credentialUrl: 'https://www.credly.com/badges/a5280e9a-eeb4-4112-9e51-3c90d5282c4b/public_url',
-    badge: '/badges/aws-academy-graduate-cloud-foundations-training-bad.png',
+    badge: '/badges/aws-academy-graduate-cloud-foundations-training-bad.webp',
   },
   {
     id: 'aws-cloud-arch',
@@ -15,7 +15,7 @@ export const CERTIFICATIONS: Certification[] = [
     issuer: 'AWS Academy',
     date: '2024',
     credentialUrl: 'https://www.credly.com/badges/c3a61cca-35ec-43c3-805b-8cde580aac81/public_url',
-    badge: '/badges/aws-academy-graduate-cloud-architecting-training-badge.png',
+    badge: '/badges/aws-academy-graduate-cloud-architecting-training-badge.webp',
   },
   {
     id: 'aws-data-eng',
@@ -23,7 +23,7 @@ export const CERTIFICATIONS: Certification[] = [
     issuer: 'AWS Academy',
     date: '2024',
     credentialUrl: 'https://www.credly.com/badges/3e4b787f-cb13-4dfb-9c7b-95126811dded/public_url',
-    badge: '/badges/aws-academy-graduate-data-engineering-training-badg.png',
+    badge: '/badges/aws-academy-graduate-data-engineering-training-badg.webp',
   },
   {
     id: 'cicd-beg',

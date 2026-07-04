@@ -1,41 +1,36 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { NAV_ITEMS } from '@/data/personal';
-import { FiCommand, FiExternalLink } from 'react-icons/fi';
+import { FiCommand } from 'react-icons/fi';
 import { usePageTransition } from '@/context/TransitionContext';
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const [activeSection, setActiveSection] = useState('');
+  const [activeSection] = useState('');
   const location = useLocation();
   const { playTransition } = usePageTransition();
   const isHome = location.pathname === '/' || location.pathname === '/index.html';
 
-  const handleScroll = useCallback(() => {
-    const currentScrollY = window.scrollY;
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() || 0;
     
     // Hide navbar when scrolling down, show when scrolling up
-    if (currentScrollY > lastScrollY && currentScrollY > 150) {
+    if (latest > previous && latest > 150) {
       setIsHidden(true);
     } else {
       setIsHidden(false);
     }
     
-    setIsScrolled(currentScrollY > 50);
-    setLastScrollY(currentScrollY);
-  }, [lastScrollY]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
+    setIsScrolled(latest > 50);
+  });
 
   const handleNavClick = (href: string) => {
     if (href.startsWith('#')) {

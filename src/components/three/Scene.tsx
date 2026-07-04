@@ -17,13 +17,15 @@ export default function Scene({
     <div className={`w-full h-full ${className}`}>
       <Canvas
         camera={camera}
-        dpr={[1, 1.5]}
+        dpr={[1, 2]} // Support high-DPI but cap at 2x
+        frameloop="demand" // Performance Critical: Only render on change
         performance={{ min: 0.5 }}
         gl={{
-          antialias: true,
+          antialias: false, // Turn off for performance, use post-process or dpr instead
           alpha: true,
           powerPreference: 'high-performance',
           stencil: false,
+          depth: true,
         }}
         style={{ background: 'transparent' }}
       >
