@@ -20,6 +20,8 @@ export interface Project {
 export interface Skill {
   name: string;
   category: SkillCategory;
+  icon?: string;
+  color?: string;
 }
 
 export type SkillCategory = 
@@ -46,6 +48,7 @@ export interface Certification {
   issuer: string;
   date: string;
   credentialUrl?: string;
+  badge?: string;
 }
 
 export interface Stat {

@@ -1,42 +1,46 @@
 import { motion } from 'framer-motion';
 import { CERTIFICATIONS } from '@/data/certifications';
 import SectionHeading from '@/components/ui/SectionHeading';
-import { FiAward, FiArrowUpRight, FiCheckCircle } from 'react-icons/fi';
+import { FiAward } from 'react-icons/fi';
 
 export default function Certifications() {
+  const activeCertifications = CERTIFICATIONS.filter(c => c.badge);
+
   return (
     <section id="certifications" className="py-24 relative overflow-hidden bg-bg-primary">
-      <div className="max-w-container mx-auto">
+      <div className="max-w-container mx-auto px-8">
         <SectionHeading title="Certifications" subtitle="Professional Validation" align="left" />
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {CERTIFICATIONS.map((cert, i) => (
-            <motion.div
+        <div className="mt-16 flex flex-wrap gap-12 items-center">
+          {activeCertifications.map((cert, i) => (
+            <motion.a
               key={cert.id}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group p-6 rounded-2xl bg-white/[0.01] border border-white/5 hover:border-sky-500/30 transition-all flex items-center justify-between"
+              href={cert.credentialUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+              className="group relative"
             >
-              <div className="flex items-center gap-5">
-                 <div className="w-10 h-10 rounded-xl bg-sky-500/5 flex items-center justify-center text-sky-400 group-hover:bg-sky-500 group-hover:text-black transition-all">
-                    <FiAward className="w-5 h-5" />
-                 </div>
-                 <div>
-                    <h4 className="text-sm font-bold text-white group-hover:text-sky-400 transition-colors uppercase tracking-tight">{cert.title}</h4>
-                    <p className="text-[9px] font-mono text-text-muted mt-1 uppercase tracking-widest">{cert.issuer}</p>
-                 </div>
+              <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-white/[0.01] border border-white/5 p-4 flex items-center justify-center transition-all group-hover:bg-white/[0.02] group-hover:border-white/20">
+                <img 
+                  src={cert.badge} 
+                  alt={cert.title} 
+                  className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.05)] group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] transition-all" 
+                />
               </div>
               
-              {cert.credentialUrl && (
-                 <a href={cert.credentialUrl} target="_blank" className="p-2 text-white/20 hover:text-white transition-colors">
-                    <FiArrowUpRight className="w-4 h-4" />
-                 </a>
-              )}
-            </motion.div>
+              {/* Subtle Label Indicator */}
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap">
+                <p className="text-[10px] font-mono text-sky-400 uppercase tracking-[0.2em]">{cert.issuer}</p>
+              </div>
+            </motion.a>
           ))}
         </div>
       </div>
     </section>
   );
 }
+

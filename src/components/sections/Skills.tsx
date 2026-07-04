@@ -6,6 +6,7 @@ const Scene = lazy(() => import('@/components/three/Scene'));
 const TechOrbit = lazy(() => import('@/components/three/TechOrbit'));
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
+import * as SiIcons from 'react-icons/si';
 
 export default function Skills() {
   const isMobile = useIsMobile();
@@ -65,14 +66,24 @@ export default function Skills() {
                  </p>
 
                 <div className="flex flex-wrap gap-2">
-                  {SKILLS.filter(s => s.category === category.name).map((skill) => (
-                    <span
-                      key={skill.name}
-                      className="px-3 py-1.5 rounded-lg border border-white/5 bg-white/[0.02] text-[9px] font-mono text-text-secondary uppercase tracking-widest group-hover:text-white group-hover:border-white/10 transition-all font-medium"
-                    >
-                      {skill.name}
-                    </span>
-                  ))}
+                  {SKILLS.filter(s => s.category === category.name).map((skill) => {
+                    const IconComponent = skill.icon ? (SiIcons as any)[skill.icon] : null;
+                    
+                    return (
+                      <span
+                        key={skill.name}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-white/5 bg-white/[0.02] text-[9px] font-mono text-text-secondary uppercase tracking-widest group-hover:text-white group-hover:border-white/10 transition-all font-medium"
+                      >
+                        {IconComponent && (
+                          <IconComponent 
+                            className="w-3 h-3 transition-colors opacity-70 group-hover:opacity-100" 
+                            style={{ color: skill.color || 'inherit' }} 
+                          />
+                        )}
+                        {skill.name}
+                      </span>
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}
