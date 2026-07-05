@@ -6,7 +6,6 @@ import MagneticButton from '@/components/ui/MagneticButton';
 import LegalModal from '@/components/ui/LegalModal';
 import { useState } from 'react';
 
-// Static map — defined outside component so it's never recreated on re-renders
 const iconMap: Record<string, React.ElementType | any> = {
   github: FiGithub,
   linkedin: FiLinkedin,
@@ -16,8 +15,8 @@ const iconMap: Record<string, React.ElementType | any> = {
 
 export default function Footer() {
   const isMobile = useIsMobile();
-  // Combine related state to reduce setter calls
-  const [legal, setLegal] = useState<{ open: boolean; type: 'privacy' | 'terms' | 'audit' }>({ open: false, type: 'privacy' });
+  const [isLegalOpen, setIsLegalOpen] = useState(false);
+  const [legalType, setLegalType] = useState<'privacy' | 'terms' | 'audit'>('privacy');
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -88,7 +87,10 @@ export default function Footer() {
                     ].map(item => (
                         <li key={item.id}>
                             <button 
-                              onClick={() => setLegal({ open: true, type: item.id as any })}
+                              onClick={() => {
+                                setLegalType(item.id as any);
+                                setIsLegalOpen(true);
+                              }}
                               className="text-sm text-text-muted hover:text-white transition-colors uppercase font-mono tracking-widest text-[9px] bg-transparent border-none p-0"
                             >
                                 {item.label}
@@ -99,9 +101,9 @@ export default function Footer() {
             </div>
 
             <LegalModal 
-              isOpen={legal.open} 
-              onClose={() => setLegal(l => ({ ...l, open: false }))} 
-              type={legal.type} 
+              isOpen={isLegalOpen} 
+              onClose={() => setIsLegalOpen(false)} 
+              type={legalType} 
             />
 
             <div className="col-span-2 md:col-span-1 flex flex-col justify-end items-end gap-6">

@@ -27,9 +27,7 @@ export default function Certifications() {
               <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-white/[0.01] border border-white/5 p-4 flex items-center justify-center transition-all group-hover:bg-white/[0.02] group-hover:border-white/20">
                 <img 
                   src={cert.badge} 
-                  alt={cert.title}
-                  loading="lazy"
-                  decoding="async"
+                  alt={cert.title} 
                   className="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(255,255,255,0.05)] group-hover:drop-shadow-[0_0_12px_rgba(255,255,255,0.15)] transition-all" 
                 />
               </div>

@@ -7,17 +7,9 @@ export function useMediaQuery(query: string): boolean {
     const media = window.matchMedia(query);
     setMatches(media.matches);
 
-    let debounceTimer: ReturnType<typeof setTimeout>;
-    const handler = (e: MediaQueryListEvent) => {
-      // Debounce resize-triggered re-renders to ~300ms
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => setMatches(e.matches), 300);
-    };
+    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
     media.addEventListener('change', handler);
-    return () => {
-      media.removeEventListener('change', handler);
-      clearTimeout(debounceTimer);
-    };
+    return () => media.removeEventListener('change', handler);
   }, [query]);
 
   return matches;

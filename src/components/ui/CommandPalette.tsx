@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_ITEMS } from '@/data/personal';
 import { FiSearch, FiDownload, FiArrowRight, FiCommand } from 'react-icons/fi';
@@ -14,13 +14,6 @@ interface CommandItem {
 export default function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-
-  // Debounce search input so filter only runs after typing pauses
-  useEffect(() => {
-    const t = setTimeout(() => setDebouncedSearch(search), 150);
-    return () => clearTimeout(t);
-  }, [search]);
 
   const commands: CommandItem[] = [
     ...NAV_ITEMS.map((item) => ({
@@ -59,9 +52,8 @@ export default function CommandPalette() {
     },
   ];
 
-  const filtered = useMemo(
-    () => commands.filter((cmd) => cmd.label.toLowerCase().includes(debouncedSearch.toLowerCase())),
-    [debouncedSearch, commands]
+  const filtered = commands.filter((cmd) =>
+    cmd.label.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleKeyDown = useCallback(

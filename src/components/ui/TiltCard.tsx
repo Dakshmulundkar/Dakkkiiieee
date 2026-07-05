@@ -1,4 +1,4 @@
-import { useRef, memo, useCallback, type ReactNode, type MouseEvent } from 'react';
+import { useRef, type ReactNode, type MouseEvent } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
@@ -9,7 +9,7 @@ interface TiltCardProps {
   glare?: boolean;
 }
 
-const TiltCard = memo(function TiltCard({ children, className, tiltStrength = 10, glare = true }: TiltCardProps) {
+export default function TiltCard({ children, className, tiltStrength = 10, glare = true }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
@@ -20,17 +20,17 @@ const TiltCard = memo(function TiltCard({ children, className, tiltStrength = 10
   const glareX = useTransform(x, [0, 1], ['-50%', '150%']);
   const glareY = useTransform(y, [0, 1], ['-50%', '150%']);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
+  const handleMouseMove = (e: MouseEvent) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width);
     y.set((e.clientY - rect.top) / rect.height);
-  }, [x, y]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     x.set(0.5);
     y.set(0.5);
-  }, [x, y]);
+  };
 
   return (
     <motion.div
@@ -57,6 +57,4 @@ const TiltCard = memo(function TiltCard({ children, className, tiltStrength = 10
       )}
     </motion.div>
   );
-});
-
-export default TiltCard;
+}

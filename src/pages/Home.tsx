@@ -8,10 +8,8 @@ import Footer from '@/components/layout/Footer';
 import ScrollProgress from '@/components/layout/ScrollProgress';
 import CommandPalette from '@/components/ui/CommandPalette';
 
-// Critical above-the-fold section — loaded first, not lazy
-import Hero from '@/components/sections/Hero';
-
-// Below-fold sections — lazy loaded after hero is painted
+// Lazy load sections for better initial performance
+const Hero = lazy(() => import('@/components/sections/Hero'));
 const About = lazy(() => import('@/components/sections/About'));
 const Projects = lazy(() => import('@/components/sections/Projects'));
 const Experience = lazy(() => import('@/components/sections/Experience'));
@@ -21,6 +19,7 @@ const Certifications = lazy(() => import('@/components/sections/Certifications')
 const Contact = lazy(() => import('@/components/sections/Contact'));
 
 export default function Home() {
+  // Initialize Lenis smooth scroll
   useSmoothScroll();
 
   return (
@@ -32,11 +31,8 @@ export default function Home() {
       <Navbar />
       <CommandPalette />
 
-      {/* Hero renders immediately — no Suspense boundary */}
-      <Hero />
-
-      {/* Below-fold sections load progressively after hero */}
-      <Suspense fallback={null}>
+      <Suspense fallback={<div className="h-screen w-full flex items-center justify-center font-mono text-xs text-text-muted">Initializing Scene...</div>}>
+        <Hero />
         <About />
         <Projects />
         <Experience />

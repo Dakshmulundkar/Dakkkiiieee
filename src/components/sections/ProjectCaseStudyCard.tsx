@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { FiGithub, FiExternalLink, FiCpu, FiServer, FiAward, FiAlertCircle } from 'react-icons/fi';
 import type { Project } from '@/types';
@@ -11,7 +10,7 @@ interface ProjectCaseStudyCardProps {
   index: number;
 }
 
-const ProjectCaseStudyCard = memo(function ProjectCaseStudyCard({ project, index }: ProjectCaseStudyCardProps) {
+export default function ProjectCaseStudyCard({ project, index }: ProjectCaseStudyCardProps) {
   // We keep the index for the background number, but remove the alternating layout logic
   
   return (
@@ -145,6 +144,4 @@ const ProjectCaseStudyCard = memo(function ProjectCaseStudyCard({ project, index
       </div>
     </div>
   );
-});
-
-export default ProjectCaseStudyCard;
+}

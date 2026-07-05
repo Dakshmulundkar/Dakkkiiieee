@@ -40,7 +40,7 @@ export default function HoverMaskEffect({
     const y = clientY - rect.top;
 
     const maskStyle = `radial-gradient(circle ${circleRadius}px at ${x}px ${y}px, black 100%, transparent 100%)`;
-
+    
     maskLayerRef.current.style.webkitMaskImage = maskStyle;
     maskLayerRef.current.style.maskImage = maskStyle;
   };
@@ -52,45 +52,16 @@ export default function HoverMaskEffect({
 
   const onMouseLeave = () => {
     if (isDisabled || !maskLayerRef.current) return;
+    maskLayerRef.current.style.webkitMaskImage = 'none';
+    maskLayerRef.current.style.maskImage = 'none';
     maskLayerRef.current.style.opacity = '0';
   };
-
-  useEffect(() => {
-    if (isDisabled) return;
-
-    let rafId: number | null = null;
-    const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-        const padding = 100;
-
-        if (
-          e.clientX >= rect.left - padding &&
-          e.clientX <= rect.right + padding &&
-          e.clientY >= rect.top - padding &&
-          e.clientY <= rect.bottom + padding
-        ) {
-          updatePosition(e.clientX, e.clientY);
-        }
-        rafId = null;
-      });
-    };
-
-    window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
-    return () => {
-      window.removeEventListener('mousemove', handleGlobalMouseMove);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
-  }, [isDisabled, circleRadius]);
 
   const onMouseEnter = (e: React.MouseEvent) => {
     if (isDisabled || !maskLayerRef.current) return;
     maskLayerRef.current.style.opacity = '1';
     updatePosition(e.clientX, e.clientY);
-  };
+  }
 
   return (
     <div
@@ -119,7 +90,6 @@ export default function HoverMaskEffect({
             color: textColor,
             WebkitMaskRepeat: 'no-repeat',
             maskRepeat: 'no-repeat',
-            willChange: 'mask-image, -webkit-mask-image',
           }}
         >
           <div className="w-full h-full [&_*]:!text-inherit [&_*]:!bg-none [&_*]:!opacity-100 [&_*]:![-webkit-text-fill-color:currentColor] [&_*]:!fill-current">
