@@ -51,6 +51,8 @@ export default function GitHub() {
                 <img 
                   src={`https://ghchart.rshah.org/38bdf8/${username}`} 
                   alt={`${username}'s Github Chart`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-full opacity-40 group-hover:opacity-100 transition-all duration-700 invert brightness-125 grayscale group-hover:grayscale-0 scale-[0.99] group-hover:scale-100"
                 />
             </div>

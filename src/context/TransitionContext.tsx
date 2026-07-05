@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 
@@ -50,7 +50,7 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   }, [timeline, navigate, isAnimating]);
 
   return (
-    <TransitionContext.Provider value={{ timeline, setTimeline, playTransition, isAnimating }}>
+    <TransitionContext.Provider value={useMemo(() => ({ timeline, setTimeline, playTransition, isAnimating }), [timeline, setTimeline, playTransition, isAnimating])}>
       {children}
     </TransitionContext.Provider>
   );

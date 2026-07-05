@@ -1,6 +1,7 @@
-import { useRef, type ReactNode, type MouseEvent } from 'react';
+import { useRef, memo, type ReactNode, type MouseEvent } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { useCallback } from 'react';
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -13,7 +14,7 @@ interface MagneticButtonProps {
   style?: React.CSSProperties;
 }
 
-export default function MagneticButton({
+const MagneticButton = memo(function MagneticButton({
   children,
   className,
   strength = 0.3,
@@ -33,19 +34,19 @@ export default function MagneticButton({
   const rotateX = useTransform(springY, [-20, 20], [5, -5]);
   const rotateY = useTransform(springX, [-20, 20], [-5, 5]);
 
-  const handleMouseMove = (e: MouseEvent) => {
+  const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
     x.set((e.clientX - centerX) * strength);
     y.set((e.clientY - centerY) * strength);
-  };
+  }, [strength, x, y]);
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     x.set(0);
     y.set(0);
-  };
+  }, [x, y]);
 
   const Component = href ? 'a' : 'button';
   const linkProps = href ? { href, download, target, rel: target === '_blank' ? 'noopener noreferrer' : undefined } : { type: 'button' as const };
@@ -74,4 +75,6 @@ export default function MagneticButton({
       </Component>
     </motion.div>
   );
-}
+});
+
+export default MagneticButton;

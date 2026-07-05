@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 import type { Project } from '@/types';
@@ -12,7 +12,7 @@ interface ProjectCardProps {
   index: number;
 }
 
-export default function ProjectCard({ project, index }: ProjectCardProps) {
+const ProjectCard = memo(function ProjectCard({ project, index }: ProjectCardProps) {
   const isEven = index % 2 === 0;
   const isMobile = useIsMobile();
   const cardRef = useRef<HTMLDivElement>(null);
@@ -136,4 +136,6 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       </div>
     </div>
   );
-}
+});
+
+export default ProjectCard;

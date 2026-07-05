@@ -58,23 +58,32 @@ export default function HoverMaskEffect({
   useEffect(() => {
     if (isDisabled) return;
 
+    let rafId: number | null = null;
     const handleGlobalMouseMove = (e: MouseEvent) => {
       if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const padding = 100;
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+        const padding = 100;
 
-      if (
-        e.clientX >= rect.left - padding &&
-        e.clientX <= rect.right + padding &&
-        e.clientY >= rect.top - padding &&
-        e.clientY <= rect.bottom + padding
-      ) {
-        updatePosition(e.clientX, e.clientY);
-      }
+        if (
+          e.clientX >= rect.left - padding &&
+          e.clientX <= rect.right + padding &&
+          e.clientY >= rect.top - padding &&
+          e.clientY <= rect.bottom + padding
+        ) {
+          updatePosition(e.clientX, e.clientY);
+        }
+        rafId = null;
+      });
     };
 
     window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
-    return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleGlobalMouseMove);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, [isDisabled, circleRadius]);
 
   const onMouseEnter = (e: React.MouseEvent) => {
