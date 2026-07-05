@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+const isTouch = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
 export default function Background() {
   return (
@@ -10,7 +11,7 @@ export default function Background() {
           background: 'radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 80%)',
           filter: 'blur(100px)',
         }}
-        animate={!window.matchMedia('(pointer: coarse)').matches ? {
+        animate={!isTouch ? {
           x: [0, -20, 10, 0],
           y: [0, 20, -10, 0],
         } : {}}
@@ -28,7 +29,7 @@ export default function Background() {
           background: 'radial-gradient(circle, rgba(16, 185, 129, 0.02) 0%, transparent 80%)',
           filter: 'blur(120px)',
         }}
-        animate={!window.matchMedia('(pointer: coarse)').matches ? {
+        animate={!isTouch ? {
           x: [0, 30, -15, 0],
           y: [0, -30, 20, 0],
         } : {}}

@@ -6,10 +6,22 @@ const Scene = lazy(() => import('@/components/three/Scene'));
 const TechOrbit = lazy(() => import('@/components/three/TechOrbit'));
 import { useIsMobile } from '@/hooks/useMediaQuery';
 import { cn } from '@/lib/utils';
-import * as SiIcons from 'react-icons/si';
+import {
+  SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss,
+  SiNodedotjs, SiExpress, SiFlask, SiFastapi, SiPostgresql, SiMongodb,
+  SiFirebase, SiCloudflare, SiDocker, SiGithubactions,
+  SiRender, SiVercel, SiTraefikproxy, SiNginx, SiGithub, SiSnyk, SiGit,
+  SiGithubcopilot, SiPostman, SiCodesandbox, SiBlueprint, SiCoderabbit
+} from 'react-icons/si';
 
-// Optimization: Pre-map icons outside component to avoid repeated object lookups
-const ICON_MAP = SiIcons as Record<string, any>;
+// Named icon map — only imports icons actually used (~27 vs ~2800)
+const ICON_MAP: Record<string, React.ComponentType<any>> = {
+  SiPython, SiJavascript, SiTypescript, SiReact, SiTailwindcss,
+  SiNodedotjs, SiExpress, SiFlask, SiFastapi, SiPostgresql, SiMongodb,
+  SiFirebase, SiCloudflare, SiDocker, SiGithubactions,
+  SiRender, SiVercel, SiTraefikproxy, SiNginx, SiGithub, SiSnyk, SiGit,
+  SiGithubcopilot, SiPostman, SiCodesandbox, SiBlueprint, SiCoderabbit
+};
 
 export default function Skills() {
   const isMobile = useIsMobile();

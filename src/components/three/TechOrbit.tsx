@@ -15,7 +15,7 @@ export default function TechOrbit() {
   return (
     <group scale={1.5}>
       <Float speed={2} rotationIntensity={0.5} floatIntensity={0.5}>
-        <Sphere args={[1, 64, 64]}>
+        <Sphere args={[1, 16, 16]}>
           <MeshDistortMaterial
             color="#0ea5e9"
             speed={2}
@@ -31,11 +31,11 @@ export default function TechOrbit() {
       
       {/* Decorative rings */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-         <torusGeometry args={[1.5, 0.005, 16, 100]} />
+         <torusGeometry args={[1.5, 0.005, 8, 60]} />
          <meshBasicMaterial color="#ffffff" transparent opacity={0.1} />
       </mesh>
       <mesh rotation={[0, Math.PI / 2, 0]}>
-         <torusGeometry args={[1.8, 0.005, 16, 100]} />
+         <torusGeometry args={[1.8, 0.005, 8, 60]} />
          <meshBasicMaterial color="#ffffff" transparent opacity={0.05} />
       </mesh>
     </group>
