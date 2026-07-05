@@ -5,7 +5,7 @@ export const SKILLS: Skill[] = [
   { name: 'Python', category: 'Languages', icon: 'SiPython', color: '#3776AB' },
   { name: 'JavaScript', category: 'Languages', icon: 'SiJavascript', color: '#F7DF1E' },
   { name: 'TypeScript', category: 'Languages', icon: 'SiTypescript', color: '#3178C6' },
-  { name: 'Java', category: 'Languages', icon: 'SiOpenjdk', color: '#007396' },
+  { name: 'Java', category: 'Languages', icon: 'SiJava', color: '#ED8B00' },
 
   // Frontend
   { name: 'React', category: 'Frontend', icon: 'SiReact', color: '#61DAFB' },
@@ -17,7 +17,7 @@ export const SKILLS: Skill[] = [
   { name: 'Express.js', category: 'Backend', icon: 'SiExpress', color: '#888888' },
   { name: 'Flask', category: 'Backend', icon: 'SiFlask', color: '#FFFFFF' },
   { name: 'FastAPI', category: 'Backend', icon: 'SiFastapi', color: '#05998B' },
-  { name: 'REST APIs', category: 'Backend', icon: 'SiPostman', color: '#FF6C37' },
+  { name: 'REST APIs', category: 'Backend', icon: 'SiBlueprint', color: '#FF6C37' },
 
   // Databases
   { name: 'PostgreSQL', category: 'Databases', icon: 'SiPostgresql', color: '#4169E1' },
