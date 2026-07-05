@@ -31,7 +31,7 @@ export default function Home() {
       <Navbar />
       <CommandPalette />
 
-      <Suspense fallback={<div className="h-screen w-full flex items-center justify-center font-mono text-xs text-text-muted">Initializing Scene...</div>}>
+      <Suspense fallback={null}>
         <Hero />
         <About />
         <Projects />

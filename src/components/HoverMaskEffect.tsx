@@ -40,7 +40,7 @@ export default function HoverMaskEffect({
     const y = clientY - rect.top;
 
     const maskStyle = `radial-gradient(circle ${circleRadius}px at ${x}px ${y}px, black 100%, transparent 100%)`;
-    
+
     maskLayerRef.current.style.webkitMaskImage = maskStyle;
     maskLayerRef.current.style.maskImage = maskStyle;
   };
@@ -52,16 +52,36 @@ export default function HoverMaskEffect({
 
   const onMouseLeave = () => {
     if (isDisabled || !maskLayerRef.current) return;
-    maskLayerRef.current.style.webkitMaskImage = 'none';
-    maskLayerRef.current.style.maskImage = 'none';
     maskLayerRef.current.style.opacity = '0';
   };
+
+  useEffect(() => {
+    if (isDisabled) return;
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const padding = 100;
+
+      if (
+        e.clientX >= rect.left - padding &&
+        e.clientX <= rect.right + padding &&
+        e.clientY >= rect.top - padding &&
+        e.clientY <= rect.bottom + padding
+      ) {
+        updatePosition(e.clientX, e.clientY);
+      }
+    };
+
+    window.addEventListener('mousemove', handleGlobalMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
+  }, [isDisabled, circleRadius]);
 
   const onMouseEnter = (e: React.MouseEvent) => {
     if (isDisabled || !maskLayerRef.current) return;
     maskLayerRef.current.style.opacity = '1';
     updatePosition(e.clientX, e.clientY);
-  }
+  };
 
   return (
     <div
