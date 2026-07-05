@@ -14,32 +14,25 @@ export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
-  const featuredProjects = PROJECTS.filter(p => p.featured);
   
   useGSAP(() => {
     if (isMobile || !horizontalRef.current || !containerRef.current) return;
 
-    const calculateScroll = () => {
-      const totalWidth = horizontalRef.current?.scrollWidth || 0;
-      const windowWidth = window.innerWidth;
-      return totalWidth - windowWidth;
-    };
+    const totalWidth = horizontalRef.current.scrollWidth;
+    const windowWidth = window.innerWidth;
+    const xDist = totalWidth - windowWidth;
 
-    const handleResize = () => {
-      ScrollTrigger.refresh();
-    };
-
-    const anim = gsap.to(horizontalRef.current, {
-      x: () => -calculateScroll(),
+    gsap.to(horizontalRef.current, {
+      x: -xDist,
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: () => `+=${calculateScroll()}`,
+        end: `+=${xDist}`,
         pin: true,
         scrub: 1,
         snap: {
-          snapTo: 1 / (featuredProjects.length),
+          snapTo: 1 / (PROJECTS.length),
           duration: { min: 0.2, max: 0.6 },
           delay: 0.05,
           ease: "power2.inOut"
@@ -47,13 +40,6 @@ export default function Projects() {
         invalidateOnRefresh: true,
       }
     });
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      anim.kill();
-      window.removeEventListener('resize', handleResize);
-    };
   }, { dependencies: [isMobile], scope: containerRef });
 
   if (isMobile) {
@@ -63,7 +49,7 @@ export default function Projects() {
           <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="left" />
         </div>
         <div className="flex flex-col gap-12">
-          {featuredProjects.map((project, i) => (
+          {PROJECTS.map((project, i) => (
             <div key={project.id} className="w-full h-auto flex flex-col items-center snap-center mb-12">
                <ProjectCard project={project} index={i} />
             </div>
@@ -87,21 +73,21 @@ export default function Projects() {
           </div>
 
           <div className="relative z-10 w-full">
-            <div 
-              ref={horizontalRef}
-              className="flex whitespace-nowrap"
-            >
-              {/* Dynamic Heading Slide */}
-              <div className="w-screen flex-shrink-0 flex items-center justify-center">
-                 <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="center" />
-              </div>
+             <div 
+               ref={horizontalRef}
+               className="flex whitespace-nowrap"
+             >
+               {/* Dynamic Heading Slide */}
+               <div className="w-screen flex-shrink-0 flex items-center justify-center">
+                  <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="center" />
+               </div>
 
-              {featuredProjects.map((project, i) => (
-                <div key={project.id} className="w-screen flex-shrink-0 flex items-center justify-center">
-                   <ProjectCard project={project} index={i} />
-                </div>
-              ))}
-            </div>
+               {PROJECTS.map((project, i) => (
+                 <div key={project.id} className="w-screen flex-shrink-0 flex items-center justify-center">
+                    <ProjectCard project={project} index={i} />
+                 </div>
+               ))}
+             </div>
           </div>
 
           {/* Technical Footer — Navigation Analytics */}
@@ -109,7 +95,7 @@ export default function Projects() {
              <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-white/10">Project_Registry</span>
                 <div className="flex items-center gap-3">
-                   {featuredProjects.map((_, i) => (
+                   {PROJECTS.map((_, i) => (
                      <div key={i} className={cn("w-1.5 h-1.5 rounded-full border border-white/5 transition-all duration-700")} />
                    ))}
                 </div>

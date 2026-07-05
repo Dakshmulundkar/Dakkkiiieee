@@ -1,35 +1,34 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
+import { Float, MeshDistortMaterial, MeshTransmissionMaterial } from '@react-three/drei';
 import * as THREE from 'three';
+import { useMousePosition } from '@/hooks/useMousePosition';
 
 export default function GlassSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const mouse = useMousePosition();
 
-  // Use a ref-based listener to avoid React re-renders on mouse move
-  useMemo(() => {
-    if (typeof window === 'undefined') return;
-    const handler = (e: MouseEvent) => {
-      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    };
-    window.addEventListener('mousemove', handler, { passive: true });
-    return () => window.removeEventListener('mousemove', handler);
-  }, []);
+  const uniforms = useMemo(
+    () => ({
+      uTime: { value: 0 },
+    }),
+    []
+  );
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!meshRef.current) return;
+    const t = state.clock.getElapsedTime();
+    uniforms.uTime.value = t;
 
     // Smooth follow mouse
     meshRef.current.rotation.x = THREE.MathUtils.lerp(
       meshRef.current.rotation.x,
-      mouseRef.current.y * 0.3,
+      mouse.normalizedY * 0.3,
       0.05
     );
     meshRef.current.rotation.y = THREE.MathUtils.lerp(
       meshRef.current.rotation.y,
-      mouseRef.current.x * 0.3,
+      mouse.normalizedX * 0.3,
       0.05
     );
   });
@@ -37,21 +36,27 @@ export default function GlassSphere() {
   return (
     <Float speed={1} rotationIntensity={0.2} floatIntensity={0.5}>
       <mesh ref={meshRef} scale={1.8}>
-        <icosahedronGeometry args={[1, 4]} />
-        <meshPhysicalMaterial
+        <icosahedronGeometry args={[1, 8]} />
+        <MeshTransmissionMaterial
+          backside
+          samples={4}
+          resolution={512}
+          thickness={1}
+          chromaticAberration={0.02}
+          anisotropy={0.1}
+          distortion={0.1}
+          distortionScale={0.1}
           color="#38bdf8"
+          attenuationDistance={0.5}
+          attenuationColor="#ffffff"
           transparent
-          opacity={0.25}
-          roughness={0.1}
-          metalness={0.8}
-          clearcoat={1}
-          clearcoatRoughness={0.1}
+          opacity={0.8}
         />
       </mesh>
 
       {/* Inner Soft Glow */}
       <mesh scale={1.2}>
-        <sphereGeometry args={[1, 16, 16]} />
+        <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial
           color="#ffffff"
           transparent
@@ -61,7 +66,7 @@ export default function GlassSphere() {
 
       {/* Subtle Orbital Ring */}
       <mesh rotation={[Math.PI / 2.5, 0, 0]} scale={2.5}>
-        <torusGeometry args={[1, 0.002, 8, 64]} />
+        <torusGeometry args={[1, 0.002, 16, 120]} />
         <meshBasicMaterial color="#38bdf8" transparent opacity={0.15} />
       </mesh>
 

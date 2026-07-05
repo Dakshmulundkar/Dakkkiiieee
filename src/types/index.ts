@@ -2,7 +2,6 @@ export interface Project {
   id: string;
   title: string;
   category: string;
-  achievement?: string;
   description: string;
   tech: string[];
   image: string;

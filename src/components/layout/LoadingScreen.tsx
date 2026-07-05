@@ -23,11 +23,10 @@ export default function LoadingScreen() {
           if (intervalRef.current) clearInterval(intervalRef.current);
           return 100;
         }
-        // High-speed simulation
-        const increment = isMobile ? (Math.random() * 20 + 10) : (Math.random() * 15 + 8);
+        const increment = isMobile ? (Math.random() * 20 + 5) : (Math.random() * 15 + 3);
         return Math.min(prev + increment, 100);
       });
-    }, isMobile ? 100 : 150);
+    }, isMobile ? 150 : 200);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -36,13 +35,17 @@ export default function LoadingScreen() {
 
   useEffect(() => {
     if (progress >= 100 && !isComplete) {
+      const timer = setTimeout(() => setIsExiting(true), isMobile ? 200 : 400);
       const exitTimer = setTimeout(() => {
         sessionStorage.setItem('site-loaded', 'true');
         setIsComplete(true);
-      }, 500); 
-      return () => clearTimeout(exitTimer);
+      }, isMobile ? 700 : 1200);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(exitTimer);
+      };
     }
-  }, [progress, isComplete]);
+  }, [progress, isMobile, isComplete]);
 
   if (isComplete) return null;
 
