@@ -5,7 +5,7 @@ export const SKILLS: Skill[] = [
   { name: 'Python', category: 'Languages', icon: 'SiPython', color: '#3776AB' },
   { name: 'JavaScript', category: 'Languages', icon: 'SiJavascript', color: '#F7DF1E' },
   { name: 'TypeScript', category: 'Languages', icon: 'SiTypescript', color: '#3178C6' },
-  { name: 'Java', category: 'Languages', icon: 'SiOpenjdk', color: '#007396' },
+  { name: 'Java', category: 'Languages', icon: 'SiJava', color: '#007396' },
 
   // Frontend
   { name: 'React', category: 'Frontend', icon: 'SiReact', color: '#61DAFB' },
@@ -17,7 +17,7 @@ export const SKILLS: Skill[] = [
   { name: 'Express.js', category: 'Backend', icon: 'SiExpress', color: '#888888' },
   { name: 'Flask', category: 'Backend', icon: 'SiFlask', color: '#FFFFFF' },
   { name: 'FastAPI', category: 'Backend', icon: 'SiFastapi', color: '#05998B' },
-  { name: 'REST APIs', category: 'Backend', icon: 'SiPostman', color: '#FF6C37' },
+  { name: 'REST APIs', category: 'Backend', icon: 'SiInsomnia', color: '#5849BE' },
 
   // Databases
   { name: 'PostgreSQL', category: 'Databases', icon: 'SiPostgresql', color: '#4169E1' },
@@ -33,12 +33,10 @@ export const SKILLS: Skill[] = [
   { name: 'Vercel', category: 'Cloud', icon: 'SiVercel', color: '#FFFFFF' },
 
   // DevOps
-  { name: 'Docker', category: 'DevOps', icon: 'SiDocker', color: '#2496ED' },
   { name: 'Traefik', category: 'DevOps', icon: 'SiTraefik', color: '#24A1C1' },
   { name: 'Nginx', category: 'DevOps', icon: 'SiNginx', color: '#009639' },
   { name: 'Dokploy', category: 'DevOps', icon: 'SiDocker', color: '#2496ED' }, 
   { name: 'CI/CD', category: 'DevOps', icon: 'SiGithubactions', color: '#2088FF' },
-  { name: 'GitHub Actions', category: 'DevOps', icon: 'SiGithubactions', color: '#2088FF' },
   { name: 'GitHub Container Registry', category: 'DevOps', icon: 'SiGithub', color: '#FFFFFF' },
 
   // Security

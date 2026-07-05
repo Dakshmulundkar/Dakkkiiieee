@@ -8,6 +8,7 @@ export interface Project {
   github?: string;
   live?: string;
   featured?: boolean;
+  achievement?: string;
   caseStudy?: {
     problem: string;
     solution: string;

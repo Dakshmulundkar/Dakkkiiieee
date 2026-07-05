@@ -39,7 +39,7 @@ export default function Transition() {
         }
       )
       // STAGE 2: Hold (page swaps behind the panels)
-      .to({}, { duration: 0.15 })
+      .to({}, { duration: 0.1 })
       // STAGE 3: Panels collapse (curtain opens, revealing new page)
       .to(panels, {
         scaleY: 0,
@@ -74,6 +74,7 @@ export default function Transition() {
           style={{
             backgroundColor: '#ffffff',
             transform: 'scaleY(0)',
+            willChange: 'transform',
           }}
         />
       ))}

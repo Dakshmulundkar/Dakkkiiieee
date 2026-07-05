@@ -110,6 +110,7 @@ export default function HoverMaskEffect({
             color: textColor,
             WebkitMaskRepeat: 'no-repeat',
             maskRepeat: 'no-repeat',
+            willChange: 'mask-image, -webkit-mask-image',
           }}
         >
           <div className="w-full h-full [&_*]:!text-inherit [&_*]:!bg-none [&_*]:!opacity-100 [&_*]:![-webkit-text-fill-color:currentColor] [&_*]:!fill-current">

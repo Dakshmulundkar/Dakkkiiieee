@@ -14,6 +14,7 @@ export default function Projects() {
   const containerRef = useRef<HTMLDivElement>(null);
   const horizontalRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const featuredProjects = PROJECTS.filter(p => p.featured);
   
   useGSAP(() => {
     if (isMobile || !horizontalRef.current || !containerRef.current) return;
@@ -32,7 +33,7 @@ export default function Projects() {
         pin: true,
         scrub: 1,
         snap: {
-          snapTo: 1 / (PROJECTS.length),
+          snapTo: 1 / (featuredProjects.length),
           duration: { min: 0.2, max: 0.6 },
           delay: 0.05,
           ease: "power2.inOut"
@@ -49,7 +50,7 @@ export default function Projects() {
           <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="left" />
         </div>
         <div className="flex flex-col gap-12">
-          {PROJECTS.map((project, i) => (
+          {featuredProjects.map((project, i) => (
             <div key={project.id} className="w-full h-auto flex flex-col items-center snap-center mb-12">
                <ProjectCard project={project} index={i} />
             </div>
@@ -73,21 +74,21 @@ export default function Projects() {
           </div>
 
           <div className="relative z-10 w-full">
-             <div 
-               ref={horizontalRef}
-               className="flex whitespace-nowrap"
-             >
-               {/* Dynamic Heading Slide */}
-               <div className="w-screen flex-shrink-0 flex items-center justify-center">
-                  <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="center" />
-               </div>
+            <div 
+              ref={horizontalRef}
+              className="flex whitespace-nowrap"
+            >
+              {/* Dynamic Heading Slide */}
+              <div className="w-screen flex-shrink-0 flex items-center justify-center">
+                 <SectionHeading title="Projects" subtitle="LAB_RESULTS" align="center" />
+              </div>
 
-               {PROJECTS.map((project, i) => (
-                 <div key={project.id} className="w-screen flex-shrink-0 flex items-center justify-center">
-                    <ProjectCard project={project} index={i} />
-                 </div>
-               ))}
-             </div>
+              {featuredProjects.map((project, i) => (
+                <div key={project.id} className="w-screen flex-shrink-0 flex items-center justify-center">
+                   <ProjectCard project={project} index={i} />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Technical Footer — Navigation Analytics */}
@@ -95,7 +96,7 @@ export default function Projects() {
              <div className="flex flex-col gap-4">
                 <span className="text-[10px] font-mono uppercase tracking-[0.5em] text-white/10">Project_Registry</span>
                 <div className="flex items-center gap-3">
-                   {PROJECTS.map((_, i) => (
+                   {featuredProjects.map((_, i) => (
                      <div key={i} className={cn("w-1.5 h-1.5 rounded-full border border-white/5 transition-all duration-700")} />
                    ))}
                 </div>
