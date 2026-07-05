@@ -24,10 +24,13 @@ export default function HoverMaskEffect({
 }: HoverMaskEffectProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const maskLayerRef = useRef<HTMLDivElement>(null);
-  const [isDisabled, setIsDisabled] = useState(manualDisabled ?? false);
+  const [isDisabled, setIsDisabled] = useState(true); // Default to true for safety during hydration
 
   useEffect(() => {
-    if (manualDisabled !== undefined) return;
+    if (manualDisabled !== undefined) {
+      setIsDisabled(manualDisabled);
+      return;
+    }
     const isTouch = window.matchMedia('(pointer: coarse)').matches;
     setIsDisabled(isTouch);
   }, [manualDisabled]);

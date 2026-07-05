@@ -18,7 +18,7 @@ export default function Scene({
       <Canvas
         camera={camera}
         dpr={[1, 2]} // Support high-DPI but cap at 2x
-        frameloop="demand" // Performance Critical: Only render on change
+        frameloop="always" // Ensure initial frames are rendered and animations are fluid
         performance={{ min: 0.5 }}
         gl={{
           antialias: false, // Turn off for performance, use post-process or dpr instead

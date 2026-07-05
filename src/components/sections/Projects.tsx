@@ -19,17 +19,23 @@ export default function Projects() {
   useGSAP(() => {
     if (isMobile || !horizontalRef.current || !containerRef.current) return;
 
-    const totalWidth = horizontalRef.current.scrollWidth;
-    const windowWidth = window.innerWidth;
-    const xDist = totalWidth - windowWidth;
+    const calculateScroll = () => {
+      const totalWidth = horizontalRef.current?.scrollWidth || 0;
+      const windowWidth = window.innerWidth;
+      return totalWidth - windowWidth;
+    };
 
-    gsap.to(horizontalRef.current, {
-      x: -xDist,
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    const anim = gsap.to(horizontalRef.current, {
+      x: () => -calculateScroll(),
       ease: "none",
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: `+=${xDist}`,
+        end: () => `+=${calculateScroll()}`,
         pin: true,
         scrub: 1,
         snap: {
@@ -41,6 +47,13 @@ export default function Projects() {
         invalidateOnRefresh: true,
       }
     });
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      anim.kill();
+      window.removeEventListener('resize', handleResize);
+    };
   }, { dependencies: [isMobile], scope: containerRef });
 
   if (isMobile) {

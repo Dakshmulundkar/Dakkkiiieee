@@ -28,9 +28,9 @@ export default function Hero() {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden py-32 bg-bg-primary"
     >
-      {/* Three.js Background — Centered & Soft */}
+      {/* Three.js Background — Layered behind content */}
       {!isMobile && (
-        <div className="absolute inset-0 z-0 opacity-30">
+        <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
           <Suspense fallback={null}>
             <Scene camera={{ position: [0, 0, 7], fov: 45 }}>
               <GlassSphere />
@@ -39,8 +39,8 @@ export default function Hero() {
         </div>
       )}
 
-      {/* Content — Perfectly Centered & Spaced */}
-      <div className="relative z-10 max-w-container px-8 flex flex-col items-center text-center">
+      {/* Content — Always Visible */}
+      <div className="relative z-10 max-w-container px-8 flex flex-col items-center text-center w-full">
         {/* Editorial Overline */}
         <motion.div
            className="flex flex-col items-center gap-6 mb-16"
