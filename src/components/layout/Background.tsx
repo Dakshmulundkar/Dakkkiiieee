@@ -8,12 +8,12 @@ export default function Background() {
         className="absolute -top-[10%] -right-[5%] w-[800px] h-[800px] rounded-full will-change-transform"
         style={{
           background: 'radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 80%)',
-          filter: 'blur(100px)', // Reduced from 120px
+          filter: 'blur(100px)',
         }}
-        animate={{
-          x: [0, -20, 10, 0], // Reduced range
+        animate={!window.matchMedia('(pointer: coarse)').matches ? {
+          x: [0, -20, 10, 0],
           y: [0, 20, -10, 0],
-        }}
+        } : {}}
         transition={{
           duration: 30,
           repeat: Infinity,
@@ -26,12 +26,12 @@ export default function Background() {
         className="absolute -bottom-[20%] -left-[10%] w-[900px] h-[900px] rounded-full will-change-transform"
         style={{
           background: 'radial-gradient(circle, rgba(16, 185, 129, 0.02) 0%, transparent 80%)',
-          filter: 'blur(120px)', // Reduced from 150px
+          filter: 'blur(120px)',
         }}
-        animate={{
+        animate={!window.matchMedia('(pointer: coarse)').matches ? {
           x: [0, 30, -15, 0],
           y: [0, -30, 20, 0],
-        }}
+        } : {}}
         transition={{
           duration: 40,
           repeat: Infinity,

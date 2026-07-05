@@ -31,7 +31,12 @@ export default function Home() {
       <Navbar />
       <CommandPalette />
 
-      <Suspense fallback={null}>
+      <Suspense fallback={
+        <div className="w-full bg-bg-primary">
+          <div className="h-screen w-full" /> {/* Hero Space */}
+          <div className="h-screen w-full" /> {/* Projects Space */}
+        </div>
+      }>
         <Hero />
         <About />
         <Projects />
