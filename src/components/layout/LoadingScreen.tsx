@@ -1,97 +1,104 @@
 import { useEffect, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/useMediaQuery';
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  onComplete: () => void;
+}
+
+const FILL_DURATION_MS = 2200;
+const HOLD_AT_100_MS = 250;
+
+export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const isMobile = useIsMobile();
   const [progress, setProgress] = useState(0);
-  const [isComplete, setIsComplete] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('site-loaded') === 'true';
-    }
-    return false;
-  });
-  const [isExiting, setIsExiting] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval>>(null);
+  const [exiting, setExiting] = useState(false);
+  const startRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const completedRef = useRef(false);
+
+  // Remove the static HTML loader the instant React takes over — no flash
+  useEffect(() => {
+    const el = document.getElementById('static-loader');
+    if (el) el.style.display = 'none';
+  }, []);
 
   useEffect(() => {
-    if (isComplete) return;
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 
-    intervalRef.current = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          if (intervalRef.current) clearInterval(intervalRef.current);
-          return 100;
-        }
-        const increment = isMobile ? (Math.random() * 20 + 5) : (Math.random() * 15 + 3);
-        return Math.min(prev + increment, 100);
-      });
-    }, isMobile ? 150 : 200);
+    const tick = (now: number) => {
+      if (startRef.current === null) startRef.current = now;
+      const elapsed = now - startRef.current;
+      const t = Math.min(elapsed / FILL_DURATION_MS, 1);
+      const p = Math.round(ease(t) * 100);
+      setProgress(p);
 
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (t < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      } else {
+        setTimeout(() => {
+          if (completedRef.current) return;
+          completedRef.current = true;
+          setExiting(true);
+
+          const fadeDuration = isMobile ? 500 : 800;
+          const mountDelay = Math.floor(fadeDuration * 0.4);
+          setTimeout(onComplete, mountDelay);
+        }, HOLD_AT_100_MS);
+      }
     };
-  }, [isMobile, isComplete]);
 
-  useEffect(() => {
-    if (progress >= 100 && !isComplete) {
-      const timer = setTimeout(() => setIsExiting(true), isMobile ? 200 : 400);
-      const exitTimer = setTimeout(() => {
-        sessionStorage.setItem('site-loaded', 'true');
-        setIsComplete(true);
-      }, isMobile ? 700 : 1200);
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(exitTimer);
-      };
-    }
-  }, [progress, isMobile, isComplete]);
-
-  if (isComplete) return null;
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-bg-primary overflow-hidden grain"
-        initial={{ opacity: 1 }}
-        animate={{ opacity: isExiting ? 0 : 1 }}
-        exit={{ y: '-100%' }}
-        transition={{ duration: isMobile ? 0.8 : 1.5, ease: [0.76, 0, 0.24, 1] }}
-      >
-        <motion.div 
-          className="absolute top-0 left-0 h-[1.5px] bg-sky-400/30"
-          style={{ width: `${progress}%`, transition: 'width 0.6s cubic-bezier(0.19, 1, 0.22, 1)' }}
-        />
+    <motion.div
+      className="fixed inset-0 z-[1000] flex flex-col items-center justify-center bg-bg-primary overflow-hidden grain"
+      animate={{ opacity: exiting ? 0 : 1 }}
+      transition={{ duration: isMobile ? 0.5 : 0.8, ease: [0.76, 0, 0.24, 1] }}
+      style={{ pointerEvents: exiting ? 'none' : 'all' }}
+    >
+      <div
+        className="absolute top-0 left-0 h-[1.5px] bg-sky-400/50"
+        style={{ width: `${progress}%`, transition: 'width 0.08s linear' }}
+      />
 
-        <div className="relative max-w-xl w-full px-12 text-center">
-           <motion.div
-             initial={{ opacity: 0, y: 12 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-             className="space-y-8"
-           >
-             <h2 className="text-3xl md:text-4xl font-bold tracking-tight editorial-text uppercase" style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '0.15em' }}>
-               Daksh Mulundkar
-             </h2>
-             
-             <div className="flex items-center justify-center gap-8 opacity-40">
-                <span className="text-[10px] font-mono uppercase tracking-[0.6em]">Systems</span>
-                <div className="w-[1.5px] h-6 bg-white/10" />
-                <span className="text-[10px] font-mono uppercase tracking-[0.6em]">Architecture</span>
-             </div>
-           </motion.div>
+      <div className="relative max-w-xl w-full px-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: [0.19, 1, 0.22, 1] }}
+          className="space-y-8"
+        >
+          <h2
+            className="text-3xl md:text-4xl font-bold tracking-tight editorial-text uppercase"
+            style={{ fontFamily: 'Space Grotesk, sans-serif', letterSpacing: '0.15em' }}
+          >
+            Daksh Mulundkar
+          </h2>
 
-           <div className="mt-24">
-              <motion.span 
-                className="block text-2xl font-mono text-white/20 tracking-[0.2em]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                {Math.round(progress)}
-              </motion.span>
-           </div>
+          <div className="flex items-center justify-center gap-8 opacity-40">
+            <span className="text-[10px] font-mono uppercase tracking-[0.6em]">Systems</span>
+            <div className="w-[1.5px] h-6 bg-white/10" />
+            <span className="text-[10px] font-mono uppercase tracking-[0.6em]">Architecture</span>
+          </div>
+        </motion.div>
+
+        <div className="mt-24">
+          <motion.span
+            className="block text-2xl font-mono text-white/20 tracking-[0.2em]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            {progress}
+          </motion.span>
         </div>
-      </motion.div>
-    </AnimatePresence>
+      </div>
+    </motion.div>
   );
 }

@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useCallback } from 'react';
 import { useSmoothScroll } from '@/hooks/useSmoothScroll';
 import Background from '@/components/layout/Background';
 import LoadingScreen from '@/components/layout/LoadingScreen';
@@ -8,39 +8,57 @@ import Footer from '@/components/layout/Footer';
 import ScrollProgress from '@/components/layout/ScrollProgress';
 import CommandPalette from '@/components/ui/CommandPalette';
 
-// Lazy load sections for better initial performance
-const Hero = lazy(() => import('@/components/sections/Hero'));
-const About = lazy(() => import('@/components/sections/About'));
-const Projects = lazy(() => import('@/components/sections/Projects'));
-const Experience = lazy(() => import('@/components/sections/Experience'));
-const Skills = lazy(() => import('@/components/sections/Skills'));
-const GitHub = lazy(() => import('@/components/sections/GitHub'));
+// These lazy() calls fire immediately when this module loads — chunks start
+// downloading in the background while the loader is running, not after it exits.
+const Hero         = lazy(() => import('@/components/sections/Hero'));
+const About        = lazy(() => import('@/components/sections/About'));
+const Projects     = lazy(() => import('@/components/sections/Projects'));
+const Experience   = lazy(() => import('@/components/sections/Experience'));
+const Skills       = lazy(() => import('@/components/sections/Skills'));
+const GitHub       = lazy(() => import('@/components/sections/GitHub'));
 const Certifications = lazy(() => import('@/components/sections/Certifications'));
-const Contact = lazy(() => import('@/components/sections/Contact'));
+const Contact      = lazy(() => import('@/components/sections/Contact'));
+
+const alreadyLoaded = typeof window !== 'undefined' &&
+  sessionStorage.getItem('site-loaded') === 'true';
 
 export default function Home() {
-  // Initialize Lenis smooth scroll
   useSmoothScroll();
+
+  // Returning visitors skip the loader — content mounts immediately.
+  // New visitors: content mounts when LoadingScreen calls onComplete,
+  // which happens ~40% into the fade-out so content is ready the instant
+  // the overlay fully disappears.
+  const [siteReady, setSiteReady] = useState(alreadyLoaded);
+
+  const handleLoadComplete = useCallback(() => {
+    sessionStorage.setItem('site-loaded', 'true');
+    setSiteReady(true);
+  }, []);
 
   return (
     <main className="relative bg-bg-primary text-text-primary selection:bg-accent-purple/30">
-      <LoadingScreen />
+      {/* Loader only shown on first visit */}
+      {!alreadyLoaded && <LoadingScreen onComplete={handleLoadComplete} />}
+
       <CustomCursor />
       <Background />
       <ScrollProgress />
       <Navbar />
       <CommandPalette />
 
-      <Suspense fallback={<div className="h-screen w-full flex items-center justify-center font-mono text-xs text-text-muted">Initializing Scene...</div>}>
-        <Hero />
-        <About />
-        <Projects />
-        <Experience />
-        <Skills />
-        <GitHub />
-        <Certifications />
-        <Contact />
-      </Suspense>
+      {siteReady && (
+        <Suspense fallback={null}>
+          <Hero />
+          <About />
+          <Projects />
+          <Experience />
+          <Skills />
+          <GitHub />
+          <Certifications />
+          <Contact />
+        </Suspense>
+      )}
 
       <Footer />
       <div className="noise-overlay" />
